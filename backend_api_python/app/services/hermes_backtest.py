@@ -94,20 +94,37 @@ class HermesBacktestBridge:
 
         try:
             from app.data_sources import DataSourceFactory
-            ds = DataSourceFactory.create("crypto")
-            df = ds.get_klines(
+
+            # Convert datetime to unix timestamps
+            start_ts = int(start.timestamp() * 1000)
+            end_ts = int(end.timestamp() * 1000)
+
+            # Calculate approximate limit based on interval
+            interval_minutes = {"1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240}
+            minutes = interval_minutes.get(interval, 1)
+            total_minutes = (end - start).total_seconds() / 60
+            limit = min(int(total_minutes / minutes) + 10, 1500)
+
+            klines = DataSourceFactory.get_kline(
+                market="crypto",
                 symbol=symbol,
-                interval=interval,
-                start_time=start,
-                end_time=end,
+                timeframe=interval,
+                limit=limit,
+                before_time=end_ts,
+                after_time=start_ts,
             )
-            if df is not None and not df.empty:
+
+            if klines and len(klines) > 0:
+                df = pd.DataFrame(klines)
+                if "time" in df.columns:
+                    df["time"] = pd.to_datetime(df["time"], unit="ms")
                 self._kline_cache[cache_key] = df.copy()
                 return df
         except Exception as e:
             logger.warning(f"Kline fetch failed for {symbol}: {e}")
 
-        return pd.DataFrame()
+        # Return empty DataFrame with expected columns
+        return pd.DataFrame(columns=["time", "open", "high", "low", "close", "volume"])
 
     def backtest_signal(
         self,
