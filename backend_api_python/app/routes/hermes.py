@@ -77,4 +77,14 @@ def push_hermes_signal():
             "score": score,
             "stage": stage,
         }
-    })
+    
+@hermes_blp.route("/status", methods=["GET"])
+def get_hermes_status():
+    """Get Hermes strategy service status."""
+    try:
+        from app.services.hermes_strategy_service import get_hermes_strategy_service
+        svc = get_hermes_strategy_service()
+        return jsonify({"ok": True, "status": svc.get_status()})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+})

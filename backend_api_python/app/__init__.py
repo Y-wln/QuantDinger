@@ -1,4 +1,4 @@
-﻿"""
+"""
 Hermes Trading API - Flask application factory.
 """
 import math
@@ -151,7 +151,9 @@ def start_grid_fill_poller():
         logger.error(f"Failed to start grid fill poller: {e}")
 
 
-def restore_running_strategies():
+def
+            start_hermes_strategy_service()
+ restore_running_strategies():
     """
     Restore running strategies on startup.
     """
@@ -373,6 +375,13 @@ def create_app(config_name='default'):
                 start_reflection_worker()
             except Exception:
                 pass
+            # Hermes strategy service: MerCu signal-driven trading
+            try:
+                from app.services.hermes_strategy_service import start_hermes_strategy_service
+                start_hermes_strategy_service()
+            except Exception:
+                pass
+
             restore_running_strategies()
     
     return app
