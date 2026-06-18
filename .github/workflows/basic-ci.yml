@@ -1,4 +1,4 @@
-﻿name: Basic CI
+name: Basic CI
 
 # Basic CI workflow for backend syntax and lint checks.
 # This workflow ensures the backend codebase has no syntax errors and passes linting.
@@ -75,6 +75,67 @@ jobs:
           # This will PASS if:
           # - Dependencies are available and importable
           # - Core module structure is intact
+
+
+  hermes-tests:
+    name: Hermes MerCu Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: ./backend_api_python
+        run: |
+          python -m pip install --upgrade pip
+          grep -v "MetaTrader5" requirements.txt > /tmp/requirements_ci.txt
+          pip install -r /tmp/requirements_ci.txt
+          pip install pytest
+
+      - name: Run hermes_mercu unit tests
+        working-directory: ./backend_api_python
+        run: |
+          echo "Running Hermes MerCu signal engine tests..."
+          python -m pytest tests/test_hermes_mercu.py -v --tb=short -p no:conftest || (
+            echo "TESTS FAILED - check output above"
+            exit 1
+          )
+          echo "✓ All Hermes MerCu tests passed"
+
+      - name: Run hermes_mercu standalone validation
+        working-directory: ./backend_api_python
+        run: |
+          echo "Validating hermes_mercu module integrity..."
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          from app.data_providers.hermes_mercu import (
+              get_stage, get_oi_score, classify_coin, detect_stage,
+              CoinType, CircuitBreaker, HermesSignalEngine, SIGNAL_SCORES
+          )
+          
+          # Quick sanity checks
+          assert get_stage(15) == '主升确认'
+          assert get_stage(-10) == '派发/出货'
+          assert classify_coin('COAI') == CoinType.YAOBI_CONTROL
+          assert len(SIGNAL_SCORES) >= 21, f'Expected 21+ signals, got {len(SIGNAL_SCORES)}'
+          
+          # Circuit breaker
+          cb = CircuitBreaker(failure_threshold=1, cooldown_seconds=0.001)
+          cb.record_failure()
+          assert cb.is_open
+          import time; time.sleep(0.002)
+          cb.record_success()
+          assert not cb.is_open
+          
+          print(f'✓ Hermes module OK - {len(SIGNAL_SCORES)} signals, 6 stages')
+          "
 
   compose-check:
     name: Docker Compose Validation
