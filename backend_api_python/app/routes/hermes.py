@@ -88,3 +88,38 @@ def get_hermes_status():
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 })
+
+
+@hermes_blp.route("/dashboard", methods=["GET"])
+def get_hermes_dashboard():
+    """Get Hermes dashboard metrics."""
+    try:
+        from app.services.hermes_integration import hermes_get_dashboard_metrics
+        metrics = hermes_get_dashboard_metrics()
+        return jsonify({"ok": True, "metrics": metrics})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/backtest-data", methods=["GET"])
+def get_hermes_backtest_data():
+    """Get Hermes signal history formatted for backtesting."""
+    try:
+        from app.services.hermes_strategy_service import get_hermes_strategy_service
+        from app.services.hermes_integration import hermes_prepare_backtest_data
+        svc = get_hermes_strategy_service()
+        data = hermes_prepare_backtest_data(svc._signal_history)
+        return jsonify({"ok": True, "count": len(data), "data": data})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/integration-status", methods=["GET"])
+def get_hermes_integration_status():
+    """Get Hermes-QuantDinger integration status."""
+    try:
+        from app.services.hermes_integration import integrate_hermes_with_quantdinger
+        status = integrate_hermes_with_quantdinger()
+        return jsonify({"ok": True, "integration": status})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500

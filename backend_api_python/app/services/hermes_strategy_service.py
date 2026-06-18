@@ -259,7 +259,7 @@ class HermesStrategyService:
         self.positions[sym] = pos
         logger.info(f"[HERMES] OPEN {direction} {sym} score={score} stage={stage} price={price}")
 
-        # TODO: Call QuantDinger TradingExecutor to actually place order
+        self._execute_trade(signal)
         # executor.open_position(symbol=sym, side=direction, ...)
 
     def _close_position(self, symbol: str, reason: str = ""):
@@ -270,7 +270,46 @@ class HermesStrategyService:
         pos = self.positions.pop(sym)
         logger.info(f"[HERMES] CLOSE {pos.direction} {sym} reason={reason}")
 
-        # TODO: Call QuantDinger TradingExecutor to close position
+        self._execute_close(sym, pos, reason)
+
+        def _execute_trade(self, signal: dict):
+        """Actually execute a trade via QuantDinger's live_trading."""
+        if os.getenv("HERMES_AUTO_EXECUTE", "false").lower() != "true":
+            logger.debug(f"Auto-execute disabled, skipping: {signal['symbol']}")
+            return
+
+        try:
+            from app.services.hermes_integration import hermes_execute_signal, hermes_send_notification
+            result = hermes_execute_signal(
+                symbol=signal["symbol"],
+                direction=signal["direction"],
+                score=signal["score"],
+                stage=signal["stage"],
+                position_size_pct=HERMES_POSITION_SIZE_PCT,
+            )
+            if result and result.get("ok"):
+                # Send notification
+                hermes_send_notification(signal, channel="webhook")
+        except Exception as e:
+            logger.error(f"Trade execution failed for {signal['symbol']}: {e}")
+
+    def _execute_close(self, symbol: str, position: HermesPosition, reason: str):
+        """Actually close a position via QuantDinger."""
+        if os.getenv("HERMES_AUTO_EXECUTE", "false").lower() != "true":
+            return
+
+        try:
+            from app.services.hermes_integration import hermes_execute_signal
+            close_direction = "SHORT" if position.direction == "LONG" else "LONG"
+            hermes_execute_signal(
+                symbol=symbol,
+                direction=close_direction,
+                score=0,
+                stage=f"Close: {reason}",
+                position_size_pct=HERMES_POSITION_SIZE_PCT,
+            )
+        except Exception as e:
+            logger.error(f"Close execution failed for {symbol}: {e}")
 
     def get_status(self) -> dict:
         """Return current service status."""
