@@ -1,4 +1,4 @@
-"""
+﻿"""
 OpenAPI / flask-smorest integration for the QuantDinger human web API.
 
 Documented routes live here and are merged into ``docs/api/openapi.yaml`` by
@@ -28,7 +28,7 @@ def _openapi_enabled() -> bool:
 
 def init_openapi(app: Flask) -> Api:
     """Register flask-smorest, shared components, and documented blueprints."""
-    app.config.setdefault("API_TITLE", "QuantDinger Web API")
+    app.config.setdefault("API_TITLE", "Hermes Trading API")
     app.config.setdefault("API_VERSION", "1.0.0")
     app.config.setdefault("OPENAPI_VERSION", "3.0.3")
     app.config.setdefault(
@@ -47,8 +47,8 @@ def init_openapi(app: Flask) -> Api:
             "info": {
                 "description": app.config.get("OPENAPI_DESCRIPTION", ""),
                 "contact": {
-                    "name": "QuantDinger",
-                    "url": "https://github.com/brokermr810/quantdinger",
+                    "name": "Hermes Trading",
+                    "url": "https://github.com/Y-wln/trading-system",
                 },
                 "license": {
                     "name": "See repository LICENSE",
@@ -133,9 +133,9 @@ def init_openapi(app: Flask) -> Api:
 
     register_human_blueprints(api)
 
-    app.extensions["quantdinger_openapi_api"] = api
+    app.extensions["hermes_openapi_api"] = api
     return api
 
 
 def get_openapi_api(app: Flask) -> Api | None:
-    return app.extensions.get("quantdinger_openapi_api")
+    return app.extensions.get("hermes_openapi_api")

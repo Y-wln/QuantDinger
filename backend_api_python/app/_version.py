@@ -1,4 +1,4 @@
-"""Application version resolution.
+﻿"""Application version resolution.
 
 Release builds inject ``APP_VERSION`` from the Git tag. Local source runs can
 fall back to Git metadata or the repo-root ``VERSION`` file, so the app version
@@ -105,7 +105,7 @@ def resolve_app_version(
     """Resolve the current app version.
 
     Priority:
-    1. Explicit runtime/build environment (APP_VERSION / QUANTDINGER_VERSION)
+    1. Explicit runtime/build environment (APP_VERSION / HERMES_VERSION)
     2. Docker build stamp file (BUILD_VERSION)
     3. CI tag environment (GIT_TAG / GITHUB_REF_NAME / GITHUB_REF)
     4. Docker tag stamp file (BUILD_GIT_TAG)
@@ -115,7 +115,7 @@ def resolve_app_version(
     """
     source_env = os.environ if env is None else env
 
-    for key in ("APP_VERSION", "QUANTDINGER_VERSION"):
+    for key in ("APP_VERSION", "HERMES_VERSION"):
         version = normalize_version(source_env.get(key))
         if version:
             return version

@@ -30,11 +30,10 @@ _PREFIX_TAGS: list[tuple[str, str]] = [
     ("/api/alpaca", "Alpaca"),
     ("/api/mt5", "MT5"),
     ("/api/global-market", "GlobalMarket"),
-    ("/api/community", "Community"),
     ("/api/fast-analysis", "FastAnalysis"),
-    ("/api/billing", "Billing"),
     ("/api/quick-trade", "QuickTrade"),
     ("/api/experiment", "Experiment"),
+    ("/api/hermes", "Hermes"),
 ]
 
 
@@ -69,11 +68,10 @@ def register_human_blueprints(api: Api) -> None:
     from app.routes.alpaca import alpaca_blp
     from app.routes.mt5 import mt5_blp
     from app.routes.global_market import global_market_blp
-    from app.routes.community import community_blp
     from app.routes.fast_analysis import fast_analysis_blp
-    from app.routes.billing import billing_blp
     from app.routes.quick_trade import quick_trade_blp
     from app.routes.experiment import experiment_blp
+    from app.routes.hermes import hermes_blp
 
     registrations: list[tuple] = [
         (health_blp, ""),
@@ -94,11 +92,10 @@ def register_human_blueprints(api: Api) -> None:
         (alpaca_blp, "/api/alpaca"),
         (mt5_blp, "/api/mt5"),
         (global_market_blp, "/api/global-market"),
-        (community_blp, "/api/community"),
         (fast_analysis_blp, "/api/fast-analysis"),
-        (billing_blp, "/api/billing"),
         (quick_trade_blp, "/api/quick-trade"),
         (experiment_blp, "/api/experiment"),
+        (hermes_blp, "/api/hermes"),
     ]
 
     for blp, prefix in registrations:
@@ -201,7 +198,6 @@ def enrich_spec(spec_dict: dict) -> dict:
             if method.startswith("x-") or not isinstance(op, dict):
                 continue
             if not op.get("operationId"):
-                # Prefer explicit operationId; fall back to path-derived id.
                 slug = re.sub(r"[^a-zA-Z0-9]+", "_", path.strip("/")).strip("_")
                 op["operationId"] = _camel(f"{method}_{slug}")
             if not op.get("summary"):
@@ -231,9 +227,9 @@ def enrich_spec(spec_dict: dict) -> dict:
                         },
                     }
             if "x-visibility" not in op:
-                if tag in ("Community", "Market", "Indicator", "Backtest", "Policy", "Auth", "GlobalMarket", "FastAnalysis", "Health"):
+                if tag in ("Market", "Indicator", "Backtest", "Policy", "Auth", "GlobalMarket", "FastAnalysis", "Health"):
                     op["x-visibility"] = "public"
-                elif tag in ("Credentials", "QuickTrade", "Billing"):
+                elif tag in ("Credentials", "QuickTrade"):
                     op["x-visibility"] = "private"
                 else:
                     op["x-visibility"] = "internal"

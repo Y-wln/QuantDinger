@@ -21,7 +21,7 @@ class MetaConfig(type):
 
     @property
     def APP_NAME(cls):
-        return 'QuantDinger Python API'
+        return 'Hermes Trading API'
 
     @property
     def VERSION(cls):
@@ -30,11 +30,11 @@ class MetaConfig(type):
     # ==================== 认证配置 ====================
     @property
     def SECRET_KEY(cls):
-        return os.getenv('SECRET_KEY', 'quantdinger-secret-key-change-me')
+        return os.getenv('SECRET_KEY', 'hermes-secret-key-change-me')
 
     @property
     def ADMIN_USER(cls):
-        return os.getenv('ADMIN_USER', 'quantdinger')
+        return os.getenv('ADMIN_USER', 'hermes')
 
     @property
     def ADMIN_PASSWORD(cls):

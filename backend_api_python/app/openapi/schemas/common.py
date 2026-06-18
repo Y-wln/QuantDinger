@@ -1,4 +1,4 @@
-"""
+﻿"""
 Shared Marshmallow schemas for OpenAPI generation.
 
 Human-facing routes use ``{code, msg, data}``. Agent Gateway routes use
@@ -58,7 +58,7 @@ class PaginationMetaSchema(Schema):
 class ApiInfoSchema(Schema):
     """GET / — API identity payload."""
 
-    name = fields.String(metadata={"example": "QuantDinger Python API"})
+    name = fields.String(metadata={"example": "Hermes Trading API"})
     version = fields.String(metadata={"example": "3.0.23"})
     status = fields.String(metadata={"example": "running"})
     timestamp = fields.DateTime(format="iso")

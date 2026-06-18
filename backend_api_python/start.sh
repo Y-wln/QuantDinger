@@ -1,6 +1,6 @@
-#!/bin/bash
+﻿#!/bin/bash
 
-# QuantDinger Python API 启动脚本
+# Hermes Trading API 启动脚本
 
 # 激活虚拟环境（如果使用虚拟环境）
 # source venv/bin/activate
