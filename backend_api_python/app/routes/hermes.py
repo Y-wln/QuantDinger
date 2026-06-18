@@ -132,6 +132,115 @@ def get_hermes_backtest_accuracy():
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 
+
+# ============================================================
+# Scanner routes (yaobi, lightning, ambush)
+# ============================================================
+
+@hermes_blp.route("/yaobi", methods=["GET"])
+def get_yaobi_signals():
+    """Get yaobi (demon coin) scanner signals."""
+    try:
+        from app.services.yaobi_scanner import get_yaobi_scanner
+        scanner = get_yaobi_scanner()
+        limit = request.args.get("limit", 10, type=int)
+        direction = request.args.get("direction", None)
+        results = scanner.get_top(limit, direction)
+        return jsonify({"ok": True, "count": len(results), "signals": results})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/yaobi/scan", methods=["POST"])
+def trigger_yaobi_scan():
+    """Trigger a yaobi scan."""
+    try:
+        from app.services.yaobi_scanner import get_yaobi_scanner
+        scanner = get_yaobi_scanner()
+        results = scanner.scan()
+        return jsonify({"ok": True, "count": len(results), "signals": [r.to_dict() for r in results[:20]]})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/lightning", methods=["GET"])
+def get_lightning_signals():
+    """Get lightning (volume burst) signals."""
+    try:
+        from app.services.lightning_scanner import get_lightning_scanner
+        scanner = get_lightning_scanner()
+        limit = request.args.get("limit", 10, type=int)
+        return jsonify({"ok": True, "signals": scanner.get_recent(limit)})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/ambush", methods=["GET"])
+def get_ambush_signals():
+    """Get ambush (pre-positioning) signals."""
+    try:
+        from app.services.ambush_scanner import get_ambush_scanner
+        scanner = get_ambush_scanner()
+        limit = request.args.get("limit", 10, type=int)
+        return jsonify({"ok": True, "signals": scanner.get_recent(limit)})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+# ============================================================
+# Tracker routes
+# ============================================================
+
+@hermes_blp.route("/tracker/status", methods=["GET"])
+def get_tracker_status():
+    """Get pipeline tracker status and accuracy."""
+    try:
+        from app.services.pipeline_tracker import get_pipeline_tracker
+        tracker = get_pipeline_tracker()
+        return jsonify({"ok": True, "status": tracker.get_status()})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/tracker/active", methods=["GET"])
+def get_tracker_active():
+    """Get active tracked signals."""
+    try:
+        from app.services.pipeline_tracker import get_pipeline_tracker
+        tracker = get_pipeline_tracker()
+        return jsonify({"ok": True, "signals": tracker.get_active()})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@hermes_blp.route("/tracker/closed", methods=["GET"])
+def get_tracker_closed():
+    """Get closed tracked signals."""
+    try:
+        from app.services.pipeline_tracker import get_pipeline_tracker
+        tracker = get_pipeline_tracker()
+        limit = request.args.get("limit", 50, type=int)
+        return jsonify({"ok": True, "signals": tracker.get_closed(limit)})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+# ============================================================
+# SelfCheck route
+# ============================================================
+
+@hermes_blp.route("/health", methods=["GET"])
+def get_hermes_health():
+    """Get full system health check."""
+    try:
+        from app.services.selfcheck import get_selfcheck
+        checker = get_selfcheck()
+        results = checker.run_check()
+        return jsonify({"ok": True, "health": results})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
 @hermes_blp.route("/integration-status", methods=["GET"])
 def get_hermes_integration_status():
     """Get Hermes-QuantDinger integration status."""
@@ -141,4 +250,5 @@ def get_hermes_integration_status():
         return jsonify({"ok": True, "integration": status})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
 
