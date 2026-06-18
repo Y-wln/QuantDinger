@@ -73,7 +73,7 @@ class PipelineTracker:
 
     def __init__(self):
         self._signals: Dict[str, TrackedSignal] = {}
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self._counter = 0
 
     def track(self, signal_data: dict, source: str = "unknown") -> str:
