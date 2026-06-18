@@ -1,4 +1,4 @@
-﻿"""
+"""
 Hermes Signal Routes.
 Exposes Mercu.win derived signals via REST API.
 """

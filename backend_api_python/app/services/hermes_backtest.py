@@ -1,4 +1,4 @@
-﻿"""
+"""
 Hermes Signal Backtest Bridge V1
 =================================
 Verifies Hermes/MerCu signal accuracy using forward returns analysis.
