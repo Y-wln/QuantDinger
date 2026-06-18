@@ -229,92 +229,6 @@ def get_tracker_closed():
 # SelfCheck route
 # ============================================================
 
-
-# ============================================================
-# Auto Tuner routes
-# ============================================================
-
-@hermes_blp.route("/tuner/status", methods=["GET"])
-def get_tuner_status():
-    """Get auto-tuner status and optimization history."""
-    try:
-        from app.services.auto_tuner import get_auto_tuner
-        tuner = get_auto_tuner()
-        return jsonify({"ok": True, "tuner": tuner.get_status()})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
-@hermes_blp.route("/tuner/optimize", methods=["POST"])
-def trigger_optimization():
-    """Trigger an immediate optimization cycle."""
-    try:
-        from app.services.auto_tuner import get_auto_tuner
-        tuner = get_auto_tuner()
-        actions = tuner.run_cycle()
-        return jsonify({
-            "ok": True,
-            "cycle": tuner._cycle,
-            "adjustments": [a.to_dict() for a in actions],
-        })
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
-@hermes_blp.route("/tuner/config", methods=["GET"])
-def get_tuner_config():
-    """Get current optimized configuration."""
-    try:
-        from app.services.auto_tuner import get_auto_tuner
-        tuner = get_auto_tuner()
-        return jsonify({"ok": True, "config": tuner.get_optimized_config()})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
-
-@hermes_blp.route("/tuner/confirm", methods=["POST"])
-def confirm_tuner_adjustment():
-    """Confirm a pending large parameter adjustment."""
-    try:
-        from app.services.auto_tuner import get_auto_tuner
-        tuner = get_auto_tuner()
-        body = request.get_json(silent=True) or {}
-        param = body.get("parameter", "")
-        if not param:
-            return jsonify({"ok": False, "error": "parameter required"}), 400
-        ok = tuner.confirm(param)
-        return jsonify({"ok": ok, "parameter": param})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
-@hermes_blp.route("/tuner/reject", methods=["POST"])
-def reject_tuner_adjustment():
-    """Reject a pending large parameter adjustment."""
-    try:
-        from app.services.auto_tuner import get_auto_tuner
-        tuner = get_auto_tuner()
-        body = request.get_json(silent=True) or {}
-        param = body.get("parameter", "")
-        ok = tuner.reject(param)
-        return jsonify({"ok": ok, "parameter": param})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
-@hermes_blp.route("/tuner/reset", methods=["POST"])
-def reset_tuner_defaults():
-    """Reset all parameters to safe defaults."""
-    try:
-        from app.services.auto_tuner import get_auto_tuner
-        tuner = get_auto_tuner()
-        tuner.reset_to_defaults()
-        return jsonify({"ok": True, "message": "All parameters reset to defaults"})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
-
-
 @hermes_blp.route("/health", methods=["GET"])
 def get_hermes_health():
     """Get full system health check."""
@@ -336,8 +250,5 @@ def get_hermes_integration_status():
         return jsonify({"ok": True, "integration": status})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
-
-
-
 
 
