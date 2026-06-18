@@ -114,6 +114,24 @@ def get_hermes_backtest_data():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
+
+@hermes_blp.route("/backtest-accuracy", methods=["GET"])
+def get_hermes_backtest_accuracy():
+    """Run accuracy analysis on historical Hermes signals."""
+    try:
+        from app.services.hermes_strategy_service import get_hermes_strategy_service
+        from app.services.hermes_backtest import get_hermes_backtest_bridge
+        svc = get_hermes_strategy_service()
+        bridge = get_hermes_backtest_bridge()
+        signals = svc._signal_history
+        if not signals:
+            return jsonify({"ok": False, "error": "No signal history available"}), 404
+        limit = request.args.get("limit", 100, type=int)
+        report = bridge.quick_accuracy_report(signals[-limit:])
+        return jsonify({"ok": True, "report": report, "signal_count": len(signals[-limit:])})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
 @hermes_blp.route("/integration-status", methods=["GET"])
 def get_hermes_integration_status():
     """Get Hermes-QuantDinger integration status."""
@@ -123,3 +141,4 @@ def get_hermes_integration_status():
         return jsonify({"ok": True, "integration": status})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
