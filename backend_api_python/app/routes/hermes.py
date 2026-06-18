@@ -1,4 +1,4 @@
-"""
+﻿"""
 Hermes Signal Routes.
 Exposes Mercu.win derived signals via REST API.
 """
@@ -17,7 +17,6 @@ def get_hermes_signals():
         limit = request.args.get("limit", 20, type=int)
         min_score = request.args.get("min_score", 5, type=int)
         signals = engine.generate_signals()
-        # Filter
         signals = [s for s in signals if abs(s["score"]) >= min_score]
         return jsonify({
             "ok": True,
@@ -47,8 +46,9 @@ def score_hermes_coin():
     engine = get_hermes_engine()
     try:
         body = request.get_json(silent=True) or {}
+        symbol = body.get("symbol", "")
         events = body.get("events", [])
-        result = engine.score_coin(events)
+        result = engine.score_events(symbol, events)
         return jsonify({"ok": True, "result": result})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
@@ -64,7 +64,6 @@ def push_hermes_signal():
     stage = body.get("stage", "")
     details = body.get("details", [])
 
-    # Store or forward the signal
     from app.utils.logger import get_logger
     logger = get_logger(__name__)
     logger.info(f"Received Hermes signal: {symbol} {direction} score={score} stage={stage}")
@@ -77,7 +76,9 @@ def push_hermes_signal():
             "score": score,
             "stage": stage,
         }
-    
+    })
+
+
 @hermes_blp.route("/status", methods=["GET"])
 def get_hermes_status():
     """Get Hermes strategy service status."""
@@ -87,7 +88,6 @@ def get_hermes_status():
         return jsonify({"ok": True, "status": svc.get_status()})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
-})
 
 
 @hermes_blp.route("/dashboard", methods=["GET"])

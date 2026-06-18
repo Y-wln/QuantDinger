@@ -18,11 +18,11 @@ from app.utils.timeutil import to_utc_iso
 class SafeJSONProvider(DefaultJSONProvider):
     """JSON provider with two cross-cutting behaviors.
 
-    1. NaN / Infinity → null.  ``json.dumps`` (allow_nan=True) emits literal
+    1. NaN / Infinity 鈫?null.  ``json.dumps`` (allow_nan=True) emits literal
        ``NaN`` / ``Infinity`` tokens which are **not** valid JSON per RFC 8259
        and crash ``JSON.parse()`` on the frontend.
 
-    2. ``datetime`` → UTC ISO 8601 (``...Z``).  Database columns are stored as
+    2. ``datetime`` 鈫?UTC ISO 8601 (``...Z``).  Database columns are stored as
        naive ``TIMESTAMP`` in the container's local time zone (``TZ`` env
        var).  Sending them out as a naive string forces the browser to
        interpret them as *local* time, which breaks every user whose locale
@@ -151,9 +151,7 @@ def start_grid_fill_poller():
         logger.error(f"Failed to start grid fill poller: {e}")
 
 
-def
-            start_hermes_strategy_service()
- restore_running_strategies():
+def restore_running_strategies():
     """
     Restore running strategies on startup.
     """
@@ -196,7 +194,7 @@ def
                     logger.info(f"[OK] {strategy_type_name} {strategy_id} restored")
                 else:
                     logger.warning(f"[FAIL] {strategy_type_name} {strategy_id} restore failed (state may be stale)")
-                    # 如果恢复失败，更新数据库状态为stopped，避免策略处于"僵尸"状态
+                    # 濡傛灉鎭㈠澶辫触锛屾洿鏂版暟鎹簱鐘舵€佷负stopped锛岄伩鍏嶇瓥鐣ュ浜?鍍靛案"鐘舵€?
                     try:
                         strategy_service.update_strategy_status(strategy_id, 'stopped')
                         logger.info(f"[FIX] Updated strategy {strategy_id} status to 'stopped' after restore failure")
@@ -262,7 +260,7 @@ def create_app(config_name='default'):
 
     app.config['JSON_AS_ASCII'] = False
 
-    # CORS — pin to specific origins instead of '*'. FRONTEND_URL accepts a
+    # CORS 鈥?pin to specific origins instead of '*'. FRONTEND_URL accepts a
     # comma-separated list (e.g. "http://localhost:8888,http://localhost:8000")
     # so dev and prod frontends can both be allowed. Default covers the docker
     # frontend port (8888) and the Vue dev server port (8000).
@@ -282,11 +280,11 @@ def create_app(config_name='default'):
     # domain), and every API request to the production backend is treated
     # as cross-origin by the WebView. The exact origin depends on the
     # Capacitor server config:
-    #   - Android (capacitor 6, androidScheme="https") → https://localhost
-    #   - Android (capacitor 5 or scheme="http")      → http://localhost
-    #   - iOS (capacitor 6, iosScheme="https")        → capacitor://localhost
-    #   - iOS legacy (ionic://)                       → ionic://localhost
-    #   - Cordova / file:// loaded apps               → null  (Origin: null)
+    #   - Android (capacitor 6, androidScheme="https") 鈫?https://localhost
+    #   - Android (capacitor 5 or scheme="http")      鈫?http://localhost
+    #   - iOS (capacitor 6, iosScheme="https")        鈫?capacitor://localhost
+    #   - iOS legacy (ionic://)                       鈫?ionic://localhost
+    #   - Cordova / file:// loaded apps               鈫?null  (Origin: null)
     #
     # We always allow these so a packaged QuantDinger mobile app can call
     # the backend without each user editing FRONTEND_URL. They are *fixed
@@ -306,7 +304,7 @@ def create_app(config_name='default'):
 
     # send_wildcard=False + supports_credentials=False is the safe default
     # for token-in-Authorization-header auth (which is what the mobile app
-    # uses; see api/index.js → `Authorization: Bearer ${token}`).
+    # uses; see api/index.js 鈫?`Authorization: Bearer ${token}`).
     CORS(
         app,
         origins=_cors_origins,
@@ -385,4 +383,5 @@ def create_app(config_name='default'):
             restore_running_strategies()
     
     return app
+
 

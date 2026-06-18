@@ -272,8 +272,8 @@ class HermesStrategyService:
 
         self._execute_close(sym, pos, reason)
 
-        def _execute_trade(self, signal: dict):
-        """Actually execute a trade via QuantDinger's live_trading."""
+    def _execute_trade(self, signal: dict):
+        """Actually execute a trade via QuantDinger live_trading."""
         if os.getenv("HERMES_AUTO_EXECUTE", "false").lower() != "true":
             logger.debug(f"Auto-execute disabled, skipping: {signal['symbol']}")
             return
@@ -288,7 +288,6 @@ class HermesStrategyService:
                 position_size_pct=HERMES_POSITION_SIZE_PCT,
             )
             if result and result.get("ok"):
-                # Send notification
                 hermes_send_notification(signal, channel="webhook")
         except Exception as e:
             logger.error(f"Trade execution failed for {signal['symbol']}: {e}")
