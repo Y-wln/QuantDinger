@@ -299,6 +299,7 @@ class MerCuClient:
     def __init__(self, base_url: str = MERCU_API_BASE, token: str = ""):
         self.base_url = base_url.rstrip("/")
         self.token = token or os.getenv("MERCU_JWT_TOKEN", "")
+        self._token_file = "/tmp/mercu_live_token.txt"
         self.session = requests.Session()
         self.session.headers.update({
             "User-Agent": "Mozilla/5.0 (compatible; Hermes/1.0)",
@@ -310,6 +311,14 @@ class MerCuClient:
         self.circuit = CircuitBreaker()
 
     def _get(self, path: str, params: dict = None) -> dict:
+        if os.path.exists(self._token_file):
+            try:
+                with open(self._token_file) as f:
+                    t = f.read().strip()
+                    if t and len(t) > 50:
+                        self.token = t
+                        self.session.headers["Authorization"] = f"Bearer {t}"
+            except: pass
         if self.circuit.is_open:
             logger.warning(f"Circuit breaker open, skipping: {path}")
             return {}
