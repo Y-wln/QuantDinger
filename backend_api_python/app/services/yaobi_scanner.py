@@ -1,244 +1,121 @@
-"""
-Yaobi Scanner V1 - 妖币扫描器
-================================
-QD-native high-volatility coin scanner.
-Replaces yaobi_v14.py with clean module design.
-
-Logic:
-1. Scan Binance futures for high-vol coins
-2. Multi-factor scoring (volume, price change, CVD, OI, orderbook)
-3. Output scored candidates
-"""
+﻿"""Yaobi Scanner V2 - Uses MerCu data (no Binance dependency)."""
 from __future__ import annotations
 
-import os
-import time
-import logging
-from typing import Dict, List, Optional, Tuple
+import os, time, threading, logging
+from typing import Dict, List, Optional
 from datetime import datetime, timezone, timedelta
 from dataclasses import dataclass, field
-
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
 BJT = timezone(timedelta(hours=8))
 
-# ============================================================
-# Configuration
-# ============================================================
-
-# Coins to skip (majors)
-SKIP_COINS = frozenset({
-    "BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "DOGE", "DOT",
-    "LINK", "AVAX", "LTC", "USDC", "USDT", "DAI", "BUSD",
-    "TUSD", "FDUSD", "WBTC", "STETH",
-})
-
-YAOBI_MIN_VOLUME_USD = float(os.getenv("YAOBI_MIN_VOLUME", "500000"))   # $500k min 24h volume
-YAOBI_MIN_PRICE_CHANGE = float(os.getenv("YAOBI_MIN_CHANGE", "2.0"))     # 2% min price change
-YAOBI_MAX_CANDIDATES = int(os.getenv("YAOBI_MAX_CANDIDATES", "30"))      # max coins to scan
-YAOBI_SCAN_INTERVAL = int(os.getenv("YAOBI_SCAN_INTERVAL", "60"))        # seconds between scans
-
-# Scoring weights
-WEIGHT_VOLUME = 0.25
-WEIGHT_PRICE_CHANGE = 0.25
-WEIGHT_CVD = 0.20
-WEIGHT_OI = 0.15
-WEIGHT_ORDERBOOK = 0.15
-
+YAOBI_MIN_SCORE = int(os.getenv("YAOBI_MIN_SCORE", "5"))
+YAOBI_SCAN_INTERVAL = int(os.getenv("YAOBI_SCAN_INTERVAL", "60"))
+YAOBI_MAX_CANDIDATES = int(os.getenv("YAOBI_MAX_CANDIDATES", "30"))
+SKIP_COINS = frozenset({"BTC","ETH","SOL","BNB","XRP","ADA","DOGE","DOT","LINK","AVAX","LTC","USDC","USDT"})
 
 @dataclass
 class YaobiCandidate:
-    """A scanned coin candidate."""
-    symbol: str
-    name: str
-    price: float
-    volume_24h: float
-    price_change_pct: float
-    cvd_5m_pct: float = 0.0
-    oi_change_pct: float = 0.0
-    ob_imbalance: float = 0.0
-    score: float = 0.0
-    direction: str = "NEUTRAL"  # LONG / SHORT / NEUTRAL
+    symbol: str; price: float = 0; volume_pct: float = 0; oi_pct: float = 0
+    score: float = 0; direction: str = "NEUTRAL"; signals: List[str] = field(default_factory=list)
     timestamp: str = ""
-
     def to_dict(self) -> dict:
-        return {
-            "symbol": self.symbol,
-            "name": self.name,
-            "price": self.price,
-            "volume_24h": self.volume_24h,
-            "price_change_pct": round(self.price_change_pct, 2),
-            "cvd_5m_pct": round(self.cvd_5m_pct, 2),
-            "oi_change_pct": round(self.oi_change_pct, 2),
-            "ob_imbalance": round(self.ob_imbalance, 2),
-            "score": round(self.score, 1),
-            "direction": self.direction,
-            "timestamp": self.timestamp,
-        }
-
+        return {"symbol":self.symbol,"price":self.price,"volume_pct":round(self.volume_pct,1),
+                "oi_pct":round(self.oi_pct,1),"score":round(self.score,1),
+                "direction":self.direction,"signals":self.signals,"timestamp":self.timestamp}
 
 class YaobiScanner:
-    """妖币扫描器 - finds high-volatility trading opportunities."""
-
     def __init__(self):
-        self._last_scan: float = 0
         self._candidates: List[YaobiCandidate] = []
+        self._last_scan: float = 0
         self._running = False
+        self._thread: Optional[threading.Thread] = None
 
-    def _get_futures_client(self):
-        """Get Binance futures exchange client from QD."""
-        try:
-            from app.services.live_trading.factory import create_client
-            from app.services.live_trading.contracts import normalize_order_market_type
-            mt = normalize_order_market_type("swap")
-            return create_client(
-                exchange_id="binance",
-                market_type=mt,
-            )
-        except Exception as e:
-            logger.warning(f"Failed to create Binance client: {e}")
-            return None
+    def start(self):
+        if self._running: return
+        self._running = True
+        self._thread = threading.Thread(target=self._loop, daemon=True, name="yaobi-scan")
+        self._thread.start()
+        logger.info("YaobiScanner V2 started (MerCu-powered)")
+
+    def stop(self):
+        self._running = False
+        if self._thread: self._thread.join(timeout=5)
+
+    def _loop(self):
+        while self._running:
+            try: self.scan()
+            except Exception as e: logger.warning(f"Yaobi scan error: {e}")
+            time.sleep(YAOBI_SCAN_INTERVAL)
 
     def scan(self) -> List[YaobiCandidate]:
-        """Run a full scan cycle."""
-        client = self._get_futures_client()
-        if not client:
-            logger.warning("No exchange client, skipping yaobi scan")
-            return []
+        from app.data_providers.hermes_mercu import get_hermes_engine
+        engine = get_hermes_engine()
+        data = engine.get_all_data()
+        anomalies = data.get("anomalies", [])
+        momentum = data.get("momentum", {})
+        surge = data.get("surge", [])
 
-        candidates: Dict[str, dict] = {}
+        results = []
+        seen = set()
 
-        # ---- Step 1: 24hr ticker scan ----
-        try:
-            tickers = client.get_tickers() if hasattr(client, "get_tickers") else []
-            if not tickers:
-                # Fallback: try individual 24hr ticker
-                tickers = []
-        except Exception as e:
-            logger.warning(f"Ticker fetch failed: {e}")
-            tickers = []
+        # Process anomalies (volume bursts, OI changes)
+        for a in anomalies[:100]:
+            sym = a.get("sym","").replace("$","")
+            if not sym or sym in SKIP_COINS or sym in seen: continue
+            seen.add(sym)
+            score = 0; signals = []; direction = "NEUTRAL"
+            grade = a.get("grade",""); dim = a.get("main_dim","")
+            d = a.get("main_direction",0); pct = abs(a.get("pct_to_ref",0))
+            val = a.get("main_value",0)
 
-        # Process tickers
-        for t in tickers:
-            sym = t.get("symbol", "")
-            if not sym.endswith("USDT"):
-                continue
-            name = sym.replace("USDT", "")
-            if name in SKIP_COINS:
-                continue
-            try:
-                vol = float(t.get("quoteVolume", 0))
-                chg = float(t.get("priceChangePercent", 0))
-                price = float(t.get("lastPrice", 0))
-                if vol > YAOBI_MIN_VOLUME_USD and abs(chg) > YAOBI_MIN_PRICE_CHANGE:
-                    score = abs(chg) * 0.4
-                    candidates[sym] = {
-                        "name": name,
-                        "price": price,
-                        "volume_24h": vol,
-                        "price_change_pct": chg,
-                        "score": score,
-                    }
-            except (ValueError, TypeError):
-                pass
+            if dim == "oi":
+                if d > 0: signals.append(f"OI+{abs(val/1e6):.1f}M"); score += 4; direction = "LONG"
+                else: signals.append(f"OI-{abs(val/1e6):.1f}M"); score += 3; direction = "SHORT"
+            elif dim == "vol":
+                signals.append(f"Vol{abs(pct):.0f}%"); score += 3
+                if "buy" in a.get("main_dim_label","").lower(): direction = "LONG"
+                elif "sell" in a.get("main_dim_label","").lower(): direction = "SHORT"
+            if "SS" in grade: score += 3
+            elif "S" in grade: score += 1
+            if pct > 50: score += 3
+            elif pct > 20: score += 1
 
-        # ---- Step 2: Top-N detailed scan ----
-        top_n = sorted(candidates.items(), key=lambda x: x[1]["score"], reverse=True)[:YAOBI_MAX_CANDIDATES]
-        results: List[YaobiCandidate] = []
+            price = float(a.get("price",0)) or float(a.get("last_price",0))
+            results.append(YaobiCandidate(
+                symbol=sym, price=price, volume_pct=pct if dim=="vol" else 0,
+                oi_pct=pct if dim=="oi" else 0, score=score, direction=direction,
+                signals=signals, timestamp=datetime.now(BJT).isoformat()))
 
-        for sym, info in top_n:
-            cvd_pct = 0.0
-            oi_pct = 0.0
-            ob_imb = 0.0
-
-            # Try CVD
-            try:
-                if hasattr(client, "get_taker_volume"):
-                    taker = client.get_taker_volume(symbol=sym, limit=30)
-                    if taker:
-                        cvd_pct = self._calc_cvd_pct(taker)
-            except Exception:
-                pass
-
-            # Try OI
-            try:
-                if hasattr(client, "get_open_interest"):
-                    oi_data = client.get_open_interest(symbol=sym)
-                    if oi_data:
-                        oi_pct = float(oi_data.get("percentage", 0))
-            except Exception:
-                pass
-
-            # Calculate final score
-            chg = info["price_change_pct"]
-            direction = "LONG" if chg > 0 else "SHORT"
-
-            final_score = (
-                abs(chg) * WEIGHT_PRICE_CHANGE * 0.1 +
-                (info["volume_24h"] / 1e7) * WEIGHT_VOLUME +
-                abs(cvd_pct) * WEIGHT_CVD * 10 +
-                oi_pct * WEIGHT_OI * 10 +
-                abs(ob_imb) * WEIGHT_ORDERBOOK * 10
-            )
-
-            candidate = YaobiCandidate(
-                symbol=sym,
-                name=info["name"],
-                price=info["price"],
-                volume_24h=info["volume_24h"],
-                price_change_pct=chg,
-                cvd_5m_pct=cvd_pct,
-                oi_change_pct=oi_pct,
-                ob_imbalance=ob_imb,
-                score=final_score,
-                direction=direction,
-                timestamp=datetime.now(BJT).isoformat(),
-            )
-            results.append(candidate)
+        # Add surge data
+        for s in surge[:10]:
+            sym = s.get("symbol","")
+            if not sym or sym in SKIP_COINS or sym in seen: continue
+            seen.add(sym)
+            mult = float(s.get("surge_mult",1))
+            signals = [f"Surge x{mult:.1f}"]
+            results.append(YaobiCandidate(
+                symbol=sym, price=float(s.get("price",0)), volume_pct=float(s.get("vol_pct",0)),
+                score=min(mult*5,15), direction="LONG" if mult>1 else "SHORT",
+                signals=signals, timestamp=datetime.now(BJT).isoformat()))
 
         results.sort(key=lambda x: x.score, reverse=True)
-        self._candidates = results
+        self._candidates = results[:YAOBI_MAX_CANDIDATES]
         self._last_scan = time.time()
-        return results
+        if results: logger.info(f"Yaobi scan: {len(results)} candidates, top={results[0].symbol} score={results[0].score}")
+        return self._candidates
 
-    @staticmethod
-    def _calc_cvd_pct(taker_data: list) -> float:
-        """Calculate CVD percentage from taker volume data."""
-        if not taker_data:
-            return 0.0
-        buy_vol = sum(float(d.get("buyVolume", 0)) for d in taker_data if float(d.get("buyVolume", 0)))
-        sell_vol = sum(float(d.get("sellVolume", 0)) for d in taker_data if float(d.get("sellVolume", 0)))
-        total = buy_vol + sell_vol
-        if total > 0:
-            return (buy_vol - sell_vol) / total * 100
-        return 0.0
+    def get_top(self, n=10, direction=None):
+        r = self._candidates
+        if direction: r = [c for c in r if c.direction==direction.upper()]
+        return [c.to_dict() for c in r[:n]]
 
-    def get_top(self, n: int = 10, direction: str = None) -> List[dict]:
-        """Get top N candidates, optionally filtered by direction."""
-        results = self._candidates
-        if direction:
-            results = [c for c in results if c.direction == direction.upper()]
-        return [c.to_dict() for c in results[:n]]
-
-    def get_status(self) -> dict:
-        """Scanner status."""
-        return {
-            "last_scan_ts": self._last_scan,
-            "candidates": len(self._candidates),
-            "top_5": self.get_top(5),
-        }
-
-
-# ============================================================
-# Singleton
-# ============================================================
+    def get_status(self):
+        return {"last_scan_ts":self._last_scan,"candidates":len(self._candidates),"top_5":self.get_top(5)}
 
 _scanner: Optional[YaobiScanner] = None
-
-
 def get_yaobi_scanner() -> YaobiScanner:
     global _scanner
-    if _scanner is None:
-        _scanner = YaobiScanner()
+    if _scanner is None: _scanner = YaobiScanner(); _scanner.start()
     return _scanner

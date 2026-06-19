@@ -12,6 +12,7 @@ import os
 import json
 import time
 import logging
+import threading
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
@@ -406,6 +407,11 @@ class HermesSignalEngine:
         self._cache_ts: float = 0
         self._cache_ttl: float = 30
 
+        # Background refresh thread
+        self._refresh_thread = None
+        self._refresh_running = False
+        self.start_refresh()
+
     def _cached(self, key: str, fetcher, *args) -> dict:
         now = time.time()
         if key in self._cache and (now - self._cache_ts) < self._cache_ttl:
@@ -414,6 +420,33 @@ class HermesSignalEngine:
         self._cache[key] = result
         self._cache_ts = now
         return result
+
+    def start_refresh(self):
+        """Start background cache refresh thread."""
+        if self._refresh_running:
+            return
+        self._refresh_running = True
+        self._refresh_thread = threading.Thread(
+            target=self._refresh_loop, daemon=True, name="mercu-refresh")
+        self._refresh_thread.start()
+        logger.info("MerCu background refresh started")
+
+    def stop_refresh(self):
+        """Stop background refresh."""
+        self._refresh_running = False
+        if self._refresh_thread:
+            self._refresh_thread.join(timeout=5)
+        logger.info("MerCu background refresh stopped")
+
+    def _refresh_loop(self):
+        """Background loop: fetch fresh data every 30s."""
+        while self._refresh_running:
+            try:
+                self.get_all_data()
+                logger.debug("MerCu cache refreshed")
+            except Exception as e:
+                logger.warning(f"MerCu refresh error: {e}")
+            time.sleep(self._cache_ttl)
 
     def get_all_data(self) -> dict:
         return {

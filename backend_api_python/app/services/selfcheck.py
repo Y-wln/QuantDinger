@@ -137,10 +137,13 @@ class SelfCheck:
     def _check_exchange(self) -> dict:
         """Check exchange connectivity."""
         try:
+            import os
+            if not os.getenv("BINANCE_API_KEY") and not os.getenv("EXCHANGE_API_KEY"):
+                return {"status": "NOT_CONFIGURED", "detail": "API keys not set (intentional)"}
             from app.services.live_trading.factory import create_client
             from app.services.live_trading.contracts import normalize_order_market_type
             client = create_client(
-                exchange_id="binance",
+                {"exchange_id": "binance"},
                 market_type=normalize_order_market_type("swap"),
             )
             if client and hasattr(client, "get_ticker"):
