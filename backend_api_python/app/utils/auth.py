@@ -162,6 +162,13 @@ def login_required(f):
     """
     @wraps(f)
     def decorated(*args, **kwargs):
+        # Skip auth when DISABLE_AUTH=true (for local/internal use)
+        if os.getenv("DISABLE_AUTH", "").lower() in ("true", "1", "yes"):
+            g.user = "admin"
+            g.user_id = 1
+            g.user_role = "admin"
+            return f(*args, **kwargs)
+        
         token = None
         
         # Read token from Authorization: Bearer <token>

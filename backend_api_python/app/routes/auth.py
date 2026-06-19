@@ -165,6 +165,16 @@ def login():
     user_agent = _get_user_agent()
     
     try:
+        # Auto-login when DISABLE_AUTH=true
+        if os.getenv("DISABLE_AUTH", "").lower() in ("true", "1", "yes"):
+            from app.utils.auth import generate_token
+            fake_user = {"id": 1, "username": "admin", "role": "admin", "token_version": 1}
+            token = generate_token(1, "admin", "admin", 1)
+            return jsonify({
+                "code": 1, "msg": "auto-login (DISABLE_AUTH)", 
+                "data": {"token": token, "userinfo": fake_user}
+            })
+        
         from app.services.security_service import get_security_service
         security = get_security_service()
         
