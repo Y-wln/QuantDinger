@@ -134,12 +134,46 @@ class HermesStrategyService:
         """Single polling tick."""
         start = time.time()
 
-        # 1. Fetch signals
+        # 1. Fetch MerCu raw data
+        mercu_data = {}
+        try:
+            mercu_data = self.engine.get_all_data()
+        except Exception as e:
+            logger.warning(f"MerCu data fetch failed: {e}")
+
+        # 2. Generate signals from engine
         try:
             signals = self.engine.generate_signals()
         except Exception as e:
             logger.warning(f"Signal generation failed: {e}")
-            return
+            signals = []
+
+        # 3. Run strategy modules (lightning, demon, ambush)
+        try:
+            from app.services.hermes_strategies import get_all_strategies, get_dag
+            strategies = get_all_strategies()
+            dag = get_dag()
+            strategy_signals = []
+            for strat in strategies:
+                try:
+                    sigs = strat.generate(mercu_data)
+                    if sigs:
+                        strategy_signals.extend(sigs)
+                except Exception as e:
+                    logger.debug(f"Strategy {strat.name} error: {e}")
+
+            # 4. DAG consensus filter on strategy signals
+            if strategy_signals:
+                strategy_signals = dag.filter_signals(strategy_signals, mercu_data)
+
+            # 5. Merge: convert strategy signals to dict + append
+            for ss in strategy_signals:
+                signals.append(ss.to_dict())
+
+            if strategy_signals:
+                logger.info(f"Strategies: {len(strategy_signals)} signals (lightning+demon+ambush)")
+        except Exception as e:
+            logger.warning(f"Strategy module error: {e}")
 
         if not signals:
             return
