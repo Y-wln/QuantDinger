@@ -267,6 +267,11 @@ class HermesStrategyService:
         direction = signal["direction"]
         price = signal.get("price") or 0
         score = signal["score"]
+
+        # Guard: dont open positions without price data
+        if not price or price <= 0:
+            logger.warning(f"Skipping {sym} {direction}: no price data (price={price})")
+            return
         stage = signal["stage"]
         coin_type = signal.get("coin_type", "")
         timestamp = signal.get("timestamp", "")
