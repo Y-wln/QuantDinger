@@ -41,7 +41,7 @@ QD_BRIDGE_WEBHOOK_URL = os.getenv("HERMES_WEBHOOK_URL", "")
 # ============================================================
 
 def _get_exchange_client(exchange_id: str = "binance", market_type: str = "swap"):
-    """Get a live trading client. Mirrors V2 hermes_integration._get_exchange_client."""
+    """Get a live trading client. Supports testnet via GATE_TESTNET=true / BYBIT_TESTNET=true etc."""
     try:
         from app.services.live_trading.factory import create_client
         from app.services.live_trading.contracts import normalize_order_market_type
@@ -50,11 +50,20 @@ def _get_exchange_client(exchange_id: str = "binance", market_type: str = "swap"
             logger.warning(f"No credentials for {exchange_id}")
             return None
         mt = normalize_order_market_type(market_type or "swap")
+        
+        # Detect testnet mode
+        is_testnet = os.getenv(f"{exchange_id.upper()}_TESTNET", "").lower() == "true"
+        config = {}
+        if is_testnet:
+            config["use_testnet"] = True
+            logger.info(f"Using {exchange_id} TESTNET")
+        
         return create_client(
             exchange_id=exchange_id, market_type=mt,
             api_key=creds.get("api_key", ""),
             secret_key=creds.get("secret_key", ""),
             passphrase=creds.get("passphrase", ""),
+            exchange_config=config,
         )
     except Exception as e:
         logger.error(f"Exchange client creation failed: {e}")
@@ -62,7 +71,14 @@ def _get_exchange_client(exchange_id: str = "binance", market_type: str = "swap"
 
 
 def _get_credentials_for_exchange(exchange_id: str) -> Optional[dict]:
-    """Get first active credential from DB."""
+    """Get credentials: env vars first, then DB fallback."""
+    eid = exchange_id.upper()
+    api_key = os.getenv(f"{eid}_API_KEY", "")
+    secret = os.getenv(f"{eid}_API_SECRET", "")
+    if api_key and secret:
+        return {"api_key": api_key, "secret_key": secret, "passphrase": os.getenv(f"{eid}_PASSPHRASE", "")}
+    
+    # DB fallback
     try:
         from app.utils.db import get_db_connection
         with get_db_connection() as db:
@@ -76,7 +92,7 @@ def _get_credentials_for_exchange(exchange_id: str) -> Optional[dict]:
             cur.close()
             return dict(row) if row else None
     except Exception as e:
-        logger.warning(f"DB credential lookup: {e}")
+        logger.debug(f"DB credential lookup: {e}")
     return None
 
 
@@ -401,3 +417,5 @@ def get_bridge_status() -> dict:
         "executor_subscribed": _qd_bridge_executor._subscribed if _qd_bridge_executor else False,
         "module_version": "V3",
     }
+
+
