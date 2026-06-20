@@ -238,7 +238,7 @@ class SignalTracker:
                             sig.price_snapshots[label] = past_price
 
                 # Update MFE/MAE
-                if current_price and sig.entry_price:
+                if current_price and sig.entry_price > 0:
                     if sig.direction == "LONG":
                         change = (current_price - sig.entry_price) / sig.entry_price
                     else:
@@ -249,6 +249,7 @@ class SignalTracker:
     # ── Close signals ───────────────────────────────────────
 
     def close_signal(self, sig_id: str, exit_price: float, exit_time: Optional[str] = None):
+        """Mark a signal as closed. Handles zero entry prices gracefully."""
         """Mark a signal as closed with exit price."""
         with self._lock:
             sig = self._signals.get(sig_id)
@@ -258,10 +259,13 @@ class SignalTracker:
             sig.exit_price = exit_price
             sig.exit_time = exit_time or datetime.now(BJT).strftime("%Y-%m-%d %H:%M:%S")
 
-            if sig.direction == "LONG":
-                sig.pnl_pct = (exit_price - sig.entry_price) / sig.entry_price
+            if sig.entry_price > 0:
+                if sig.direction == "LONG":
+                    sig.pnl_pct = (exit_price - sig.entry_price) / sig.entry_price
+                else:
+                    sig.pnl_pct = (sig.entry_price - exit_price) / sig.entry_price
             else:
-                sig.pnl_pct = (sig.entry_price - exit_price) / sig.entry_price
+                sig.pnl_pct = 0.0  # No entry price available
 
             if sig.pnl_pct > 0.003:  # > 0.3% profit
                 sig.outcome = "win"
@@ -435,3 +439,5 @@ def get_tracker(storage_dir: Optional[str] = None) -> SignalTracker:
     if _tracker_instance is None:
         _tracker_instance = SignalTracker(storage_dir)
     return _tracker_instance
+
+

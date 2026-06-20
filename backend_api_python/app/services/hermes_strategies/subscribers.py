@@ -23,9 +23,7 @@ class SignalLogger:
     """Persists all signals to a JSONL file for backtesting and analysis."""
 
     def __init__(self, log_path: Optional[str] = None):
-        self.log_path = log_path or os.path.join(
-            os.path.dirname(__file__), "..", "..", "..", "logs", "signals.jsonl"
-        )
+        self.log_path = log_path or os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "logs", "signals.jsonl"))
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
         self._count = 0
 
@@ -194,3 +192,6 @@ __all__ = [
     "FeishuBridge", "_feishu", "set_feishu_webhook",
     "HealthMonitor",
 ]
+
+
+
