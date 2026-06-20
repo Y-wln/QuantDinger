@@ -141,6 +141,16 @@ def start_hermes_v3():
                     data = bridge.fetch()
                     bus = EventBus.get()
                     bus.emit(Event(type=EventType.MERCU_DATA, data=data, source="mercu_bridge"))
+                    
+                    # Merge engine signals (21+ doc-based scores) into data
+                    if bridge.engine:
+                        engine_signals = bridge.engine.generate_signals()
+                        if engine_signals:
+                            data["engine_signals"] = engine_signals
+                            for es in engine_signals:
+                                bus.emit(Event(type=EventType.SIGNAL_GENERATED, 
+                                    data=es, source="engine"))
+                    
                     runner._run_cycle(mercu_data_provider=lambda: data)
                 except Exception as e:
                     _log.error(f"MerCu poll error: {e}")
@@ -186,6 +196,7 @@ def get_hermes_v3_status() -> dict:
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
 
 
 

@@ -149,27 +149,67 @@ class MerCuDataBridge:
                 }
         indicators["momentum_map"] = momentum_map
 
-        # 2. Surge rhythm map
+        # 2. Surge rhythm map + derived fields
         surge_map = {}
         for item in surge:
             sym = item.get("sym", "")
+            # Parse raw surge data
+            rhythm = item.get("rhythm", "")
+            accel = float(item.get("accel", 0))
+            total = int(item.get("total", 0))
+            direction = item.get("dir", "up")
+            
+            # Derived: bid_wall from surge context (if accel > 1.0 and total > 5 = buying pressure)
+            bid_wall = min(25, int(accel * total * 2)) if accel > 1.0 and direction == "up" else 0
+            
+            # Derived: trap detection from rhythm patterns
+            mid_trap = "陷阱" in rhythm and "高" not in rhythm
+            high_trap_count = 1 if "高陷阱" in str(item.get("tags", "")) or "高陷阱" in rhythm else 0
+            
+            # Derived: stage sequence from rhythm patterns
+            stage_seq = []
+            if "吸筹" in str(item): stage_seq.append("吸筹")
+            if "多头" in str(item) or "主升" in str(item): stage_seq.append("多头")
+            if "派发" in str(item): stage_seq.append("派发")
+            if rhythm: stage_seq.append(rhythm)
+            
             surge_map[sym] = {
-                "rhythm": item.get("rhythm", ""),
-                "accel": float(item.get("accel", 0)),
-                "total": int(item.get("total", 0)),
-                "dir": item.get("dir", "up")
+                "rhythm": rhythm,
+                "accel": accel,
+                "total": total,
+                "dir": direction,
+                "bid_wall": bid_wall,
+                "mid_trap": mid_trap,
+                "high_trap_count": high_trap_count,
+                "stage_sequence": stage_seq
             }
         indicators["surge_map"] = surge_map
 
-        # 3. Plaza divergence detection
+        # 3. Plaza divergence detection + spot flow
         plaza_map = {}
         for item in plaza:
             sym = item.get("sym", item.get("symbol", ""))
+            sentiment = item.get("sentiment", "")
+            smart = item.get("smart_money", "")
+            
+            # Derived: spot_flow from smart money + sentiment
+            if "多" in str(smart) and "bull" in str(sentiment).lower():
+                spot_flow = "buy"
+            elif "空" in str(smart) and "bear" in str(sentiment).lower():
+                spot_flow = "sell"
+            elif "bull" in str(sentiment).lower():
+                spot_flow = "buy"
+            elif "bear" in str(sentiment).lower():
+                spot_flow = "sell"
+            else:
+                spot_flow = "neutral"
+            
             plaza_map[sym] = {
-                "sentiment": item.get("sentiment", ""),
+                "sentiment": sentiment,
                 "strength": float(item.get("strength", 0)),
-                "smart_money": item.get("smart_money", ""),
-                "divergence": item.get("divergence", False)
+                "smart_money": smart,
+                "divergence": item.get("divergence", False),
+                "spot_flow": spot_flow
             }
         indicators["plaza_map"] = plaza_map
 
@@ -179,9 +219,19 @@ class MerCuDataBridge:
             sym = (a.get("symbol") or a.get("sym", "")).upper()
             if a.get("main_dim") == "oi":
                 if sym not in oi_flow:
-                    oi_flow[sym] = {"oi_change": 0, "signals": 0}
-                oi_flow[sym]["oi_change"] += a.get("main_value", 0)
+                    oi_flow[sym] = {"oi_change": 0, "signals": 0, "direction": "neutral"}
+                val = a.get("main_value", 0) * a.get("main_direction", 1)
+                oi_flow[sym]["oi_change"] += val
                 oi_flow[sym]["signals"] += 1
+            if a.get("main_dim") == "vol" and a.get("main_direction", 0) > 0:
+                if sym not in oi_flow:
+                    oi_flow[sym] = {"oi_change": 0, "signals": 0, "direction": "neutral"}
+                oi_flow[sym]["vol_signal"] = True
+        
+        # Compute OI direction
+        for sym, data in oi_flow.items():
+            data["direction"] = "up" if data["oi_change"] > 0 else "down" if data["oi_change"] < 0 else "neutral"
+        
         indicators["oi_flow"] = oi_flow
 
         # 5. CVD proxy from momentum + anomaly combo
@@ -329,6 +379,8 @@ def run_hermes(
 # ── Run directly ─────────────────────────────────────────────
 if __name__ == "__main__":
     run_hermes()
+
+
 
 
 
