@@ -172,12 +172,12 @@ class HermesRunner:
         if not mercu_data:
             return
 
-        # 2. Run each strategy
+        # 2. Run each strategy, collect signals
+        raw_signals = []
         for strategy in self._strategies:
             try:
                 signals = strategy.generate(mercu_data)
-                for sig in signals:
-                    self._process_signal(sig, strategy.name)
+                raw_signals.extend(signals)
             except Exception as e:
                 self._components["strategies"].record_error(str(e))
                 self.bus.emit(Event(EventType.ERROR, {
@@ -185,15 +185,16 @@ class HermesRunner:
                     "error": str(e)
                 }, source=strategy.name))
 
-        # 3. DAG consensus (if loaded)
-        if self._dag and len(self._signal_log) > 0:
+        # 3. DAG consensus filter (if loaded)
+        if self._dag and raw_signals:
             try:
-                # Get latest signals this cycle
-                recent = [s for s in self._signal_log[-20:] 
-                         if s.get("stage") != "risk_blocked"]
-                self._dag.analyze(mercu_data, recent)
-            except Exception as e:
+                raw_signals = self._dag.filter_signals(raw_signals, mercu_data)
+            except Exception:
                 pass
+
+        # 4. Process filtered signals
+        for sig in raw_signals:
+            self._process_signal(sig, sig.source or "strategy")
 
         self.heartbeat("risk_engine")
 
@@ -337,3 +338,4 @@ class HealthReporter:
                     }, source="health_reporter"))
             except Exception:
                 pass
+
