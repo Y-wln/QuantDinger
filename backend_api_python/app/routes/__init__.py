@@ -1,4 +1,4 @@
-"""
+﻿"""
 API Routes Module -- Agent Gateway + OpenAPI-registered human routes.
 """
 from flask import Flask
@@ -11,3 +11,7 @@ def register_routes(app: Flask):
 
     from app.routes.agent_v1 import register as register_agent_v1
     register_agent_v1(app)
+
+    # Hermes trading system health/signals API
+    from app.routes.hermes_api import hermes_bp
+    app.register_blueprint(hermes_bp, url_prefix="/api/hermes")

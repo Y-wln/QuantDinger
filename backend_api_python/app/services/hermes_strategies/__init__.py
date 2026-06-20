@@ -29,6 +29,9 @@ from .ambush_v2 import AmbushV2
 from .demon_v2 import DemonV2
 # lightning_v2 disabled - backtest showed 12-33% accuracy
 
+# Subscribers (auto-register via @on decorators when imported)
+from . import subscribers  # noqa: F401
+
 # ── Strategy Registry ──────────────────────────────────────
 
 STRATEGIES = [
@@ -48,7 +51,6 @@ def get_dag():
 
 def create_runner(mercu_fetcher=None, risk_config: Optional[RiskConfig] = None) -> HermesRunner:
     """Create a fully configured runner with all modules wired."""
-    # Reset singletons for clean start
     EventBus.reset()
     RiskEngine.reset()
 
@@ -57,11 +59,9 @@ def create_runner(mercu_fetcher=None, risk_config: Optional[RiskConfig] = None) 
     runner = HermesRunner()
     runner.load_from_registry()
 
-    # Auto-health reporting every 60s
     health = HealthReporter(runner, interval_seconds=60)
     health.start()
 
-    # Wire MerCu data provider
     def _fetch():
         if mercu_fetcher:
             return mercu_fetcher()
@@ -72,14 +72,11 @@ def create_runner(mercu_fetcher=None, risk_config: Optional[RiskConfig] = None) 
 # ── Exports ────────────────────────────────────────────────
 
 __all__ = [
-    # Core
     "BaseStrategy", "StrategySignal", "BJT",
     "EventBus", "Event", "EventType", "on",
     "RiskEngine", "RiskConfig", "RiskVerdict", "CircuitBreaker",
     "HermesRunner", "HealthReporter", "ComponentHealth",
-    # Strategies
     "DemonV2", "AmbushV2", "DAGConsensusV2",
     "STRATEGIES", "DAG",
-    # Helpers
     "get_all_strategies", "get_dag", "create_runner",
 ]
