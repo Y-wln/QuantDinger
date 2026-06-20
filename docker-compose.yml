@@ -1,4 +1,4 @@
-﻿# Hermes Trading Docker Compose - One-Click Deployment
+# Hermes Trading Docker Compose - One-Click Deployment
 # Usage:
 #   1. Copy env.example to .env and edit your settings
 #      cp backend_api_python/env.example backend_api_python/.env
@@ -138,6 +138,10 @@ services:
       # Takes precedence over mounted .env (run.py load_dotenv override=False).
       # Include :8000 when using Vite dev server alongside this stack.
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:8888,http://localhost:8000}
+      # Proxy for external API access (Binance/Bybit blocked in China)
+      - HTTP_PROXY=http://172.18.0.1:7892
+      - HTTPS_PROXY=http://172.18.0.1:7892
+      - NO_PROXY=localhost,127.0.0.1,postgres,redis,backend,frontend,.local
     networks:
       - hermes-network
     healthcheck:
