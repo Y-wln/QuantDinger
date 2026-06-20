@@ -29,7 +29,11 @@ logger = logging.getLogger(__name__)
 
 
 class MerCuDataBridge:
-    """Bridges MerCu data (from hermes_mercu.py) into the EventBus + Runner."""
+    """Bridges ALL MerCu data (9 endpoints) into the EventBus + Runner.
+    
+    V3 Extended: fetches all V2 endpoints (anomalies, momentum, surge, rank, 
+    plaza, deep, briefs, dashboard) plus computed indicators.
+    """
 
     def __init__(self):
         self._engine = None
@@ -52,31 +56,45 @@ class MerCuDataBridge:
         return self._engine
 
     def fetch(self) -> dict:
-        """Fetch latest MerCu data. Returns dict with anomalies, momentum, etc."""
+        """Fetch ALL MerCu endpoints. Returns complete data dict."""
         now = time.time()
         if now - self._last_fetch_time < self._fetch_interval:
-            return self._data_cache  # Use cached data
+            return self._data_cache
 
         try:
             engine = self.engine
             if engine is None:
                 return {}
 
+            # Fetch all 9 endpoints
             data = {
-                "anomalies": engine.get_anomalies(limit=100),
+                "anomalies": engine.get_anomalies(limit=100) if hasattr(engine, 'get_anomalies') else [],
                 "momentum": engine.get_momentum() if hasattr(engine, 'get_momentum') else {},
+                "surge": engine.get_surge(limit=20) if hasattr(engine, 'get_surge') else [],
+                "rank": engine.get_rank() if hasattr(engine, 'get_rank') else {},
+                "plaza": engine.get_plaza(limit=20) if hasattr(engine, 'get_plaza') else [],
+                "deep": engine.get_deep(limit=10) if hasattr(engine, 'get_deep') else [],
+                "briefs": engine.get_briefs() if hasattr(engine, 'get_briefs') else [],
+                "dashboard": engine.get_dashboard() if hasattr(engine, 'get_dashboard') else {},
                 "timestamp": datetime.now(BJT).strftime("%Y-%m-%d %H:%M:%S")
             }
+
+            # Compute derived indicators from MerCu data
+            data["indicators"] = self._compute_indicators(data)
 
             self._data_cache = data
             self._last_fetch_time = now
             self._fetch_errors = 0
 
-            # Emit to EventBus
+            # Emit to EventBus with full stats
             bus = EventBus.get()
             bus.emit(Event(EventType.MERCU_DATA, {
                 "anomaly_count": len(data.get("anomalies", [])),
+                "surge_count": len(data.get("surge", [])),
+                "plaza_count": len(data.get("plaza", [])),
+                "deep_count": len(data.get("deep", [])),
                 "momentum_boards": len(data.get("momentum", {}).get("boards", {})),
+                "rank_entries": len(data.get("rank", {}).get("data", [])),
                 "timestamp": data["timestamp"]
             }, source="mercu_bridge"))
 
@@ -98,7 +116,91 @@ class MerCuDataBridge:
                     "component": "mercu_bridge"
                 }, source="mercu_bridge"))
 
-            return self._data_cache  # Return stale cache rather than nothing
+            return self._data_cache
+
+    def _compute_indicators(self, data: dict) -> dict:
+        """Compute derived indicators from MerCu data (no exchange needed)."""
+        indicators = {}
+        
+        anomalies = data.get("anomalies", [])
+        momentum = data.get("momentum", {})
+        boards = momentum.get("boards", {})
+        surge = data.get("surge", [])
+        plaza = data.get("plaza", [])
+
+        # 1. Momentum strength per coin
+        momentum_map = {}
+        for side in ("priceUp", "priceDown"):
+            for item in boards.get(side, []):
+                sym = item.get("sym", "")
+                strength = float(item.get("strength", 0))
+                resonance = item.get("resonance", [])
+                val_str = item.get("val", "0%")
+                try:
+                    val_pct = float(val_str.replace("%", "").replace("+", ""))
+                except ValueError:
+                    val_pct = 0.0
+                momentum_map[sym] = {
+                    "side": "up" if side == "priceUp" else "down",
+                    "strength": strength,
+                    "change_pct": val_pct,
+                    "resonance": resonance,
+                    "resonance_count": len(resonance)
+                }
+        indicators["momentum_map"] = momentum_map
+
+        # 2. Surge rhythm map
+        surge_map = {}
+        for item in surge:
+            sym = item.get("sym", "")
+            surge_map[sym] = {
+                "rhythm": item.get("rhythm", ""),
+                "accel": float(item.get("accel", 0)),
+                "total": int(item.get("total", 0)),
+                "dir": item.get("dir", "up")
+            }
+        indicators["surge_map"] = surge_map
+
+        # 3. Plaza divergence detection
+        plaza_map = {}
+        for item in plaza:
+            sym = item.get("sym", item.get("symbol", ""))
+            plaza_map[sym] = {
+                "sentiment": item.get("sentiment", ""),
+                "strength": float(item.get("strength", 0)),
+                "smart_money": item.get("smart_money", ""),
+                "divergence": item.get("divergence", False)
+            }
+        indicators["plaza_map"] = plaza_map
+
+        # 4. OI flow analysis from anomalies
+        oi_flow = {}
+        for a in anomalies:
+            sym = (a.get("symbol") or a.get("sym", "")).upper()
+            if a.get("main_dim") == "oi":
+                if sym not in oi_flow:
+                    oi_flow[sym] = {"oi_change": 0, "signals": 0}
+                oi_flow[sym]["oi_change"] += a.get("main_value", 0)
+                oi_flow[sym]["signals"] += 1
+        indicators["oi_flow"] = oi_flow
+
+        # 5. CVD proxy from momentum + anomaly combo
+        cvd_proxy = {}
+        for sym, mom in momentum_map.items():
+            oi = oi_flow.get(sym, {}).get("oi_change", 0)
+            # Strong price up + OI up = strong buying (CVD proxy positive)
+            # Strong price down + OI down = strong selling (CVD proxy negative)
+            if mom["side"] == "up" and oi > 0:
+                cvd_proxy[sym] = "strong_buy"
+            elif mom["side"] == "down" and oi < 0:
+                cvd_proxy[sym] = "strong_sell"
+            elif mom["side"] == "up":
+                cvd_proxy[sym] = "buy"
+            elif mom["side"] == "down":
+                cvd_proxy[sym] = "sell"
+        indicators["cvd_proxy"] = cvd_proxy
+
+        return indicators
 
     def is_healthy(self) -> bool:
         """Check if data is fresh (fetched within 2x interval)."""
@@ -227,5 +329,6 @@ def run_hermes(
 # ── Run directly ─────────────────────────────────────────────
 if __name__ == "__main__":
     run_hermes()
+
 
 

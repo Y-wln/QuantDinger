@@ -85,7 +85,8 @@ __all__ = [
     "HermesRunner", "HealthReporter", "ComponentHealth",
     "DemonV2", "AmbushV2", "DAGConsensusV2",
     "STRATEGIES", "DAG",
-    "get_all_strategies", "get_dag", "create_runner",
+    "get_all_strategies", "get_dag", "create_runner", "init_subscribers",
     "init_subscribers",
 ]
+
 
