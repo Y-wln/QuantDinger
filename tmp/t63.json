@@ -1,0 +1,226 @@
+﻿[
+  {
+    "name": ".dockerignore",
+    "path": ".dockerignore",
+    "sha": "89a876b12ff43f0fc9b79d02049e7ea195ae9b09",
+    "size": 308,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.dockerignore?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/.dockerignore",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/89a876b12ff43f0fc9b79d02049e7ea195ae9b09",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/.dockerignore?token=CB3K7B2US555JBOCAR42S4LKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.dockerignore?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/89a876b12ff43f0fc9b79d02049e7ea195ae9b09",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/.dockerignore"
+    }
+  },
+  {
+    "name": ".gitattributes",
+    "path": ".gitattributes",
+    "sha": "486a23256c437b811b5647e40517a35964f60dc6",
+    "size": 42,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.gitattributes?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/.gitattributes",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/486a23256c437b811b5647e40517a35964f60dc6",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/.gitattributes?token=CB3K7BZITWQIGHJ5SWYYY3TKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.gitattributes?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/486a23256c437b811b5647e40517a35964f60dc6",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/.gitattributes"
+    }
+  },
+  {
+    "name": ".github",
+    "path": ".github",
+    "sha": "cf6be2d174d9927dee2d42d73461d5ebf3b951cf",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.github?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/tree/main/.github",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/cf6be2d174d9927dee2d42d73461d5ebf3b951cf",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.github?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/cf6be2d174d9927dee2d42d73461d5ebf3b951cf",
+      "html": "https://github.com/Y-wln/FinceptTerminal/tree/main/.github"
+    }
+  },
+  {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "sha": "b2b8ce0a0f68a3f25079924e3772bb748e0b239a",
+    "size": 5463,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.gitignore?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/.gitignore",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/b2b8ce0a0f68a3f25079924e3772bb748e0b239a",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/.gitignore?token=CB3K7BZ7ORRE3WTIOJNYEGDKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/.gitignore?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/b2b8ce0a0f68a3f25079924e3772bb748e0b239a",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/.gitignore"
+    }
+  },
+  {
+    "name": "Dockerfile",
+    "path": "Dockerfile",
+    "sha": "ab6ca0eca3d9fa1fa8280b9d4beea018e18b5ad3",
+    "size": 11705,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/Dockerfile?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/Dockerfile",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/ab6ca0eca3d9fa1fa8280b9d4beea018e18b5ad3",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/Dockerfile?token=CB3K7B7REHS3WI5ISE3GI23KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/Dockerfile?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/ab6ca0eca3d9fa1fa8280b9d4beea018e18b5ad3",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/Dockerfile"
+    }
+  },
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "043a953a9822f9840866b8bb47b4c8f80c91a9cf",
+    "size": 14750,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/LICENSE?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/LICENSE",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/043a953a9822f9840866b8bb47b4c8f80c91a9cf",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/LICENSE?token=CB3K7B6EMLG5XBQ32TWO4PLKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/LICENSE?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/043a953a9822f9840866b8bb47b4c8f80c91a9cf",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/LICENSE"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "7aa4ed5dd99c2dc185340b52675bcef8ea536909",
+    "size": 18987,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/README.md?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/7aa4ed5dd99c2dc185340b52675bcef8ea536909",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/README.md?token=CB3K7B6UGO5VY5C5YI4VFFDKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/7aa4ed5dd99c2dc185340b52675bcef8ea536909",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/README.md"
+    }
+  },
+  {
+    "name": "docs",
+    "path": "docs",
+    "sha": "74bf1b0155d703e1acc46e4edc6aaf2aa3475aa3",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/docs?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/tree/main/docs",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/74bf1b0155d703e1acc46e4edc6aaf2aa3475aa3",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/docs?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/74bf1b0155d703e1acc46e4edc6aaf2aa3475aa3",
+      "html": "https://github.com/Y-wln/FinceptTerminal/tree/main/docs"
+    }
+  },
+  {
+    "name": "fincept-qt",
+    "path": "fincept-qt",
+    "sha": "1f9f6f9b221d591a5c7911b5b093ee97bbc95af3",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/fincept-qt?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/tree/main/fincept-qt",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/1f9f6f9b221d591a5c7911b5b093ee97bbc95af3",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/fincept-qt?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/1f9f6f9b221d591a5c7911b5b093ee97bbc95af3",
+      "html": "https://github.com/Y-wln/FinceptTerminal/tree/main/fincept-qt"
+    }
+  },
+  {
+    "name": "fincept_icon.ico",
+    "path": "fincept_icon.ico",
+    "sha": "78b8949139210eccd060d5ac6436d122af06229f",
+    "size": 307520,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/fincept_icon.ico?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/fincept_icon.ico",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/78b8949139210eccd060d5ac6436d122af06229f",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/fincept_icon.ico?token=CB3K7BZ2WXKIY2X5WIDKLJ3KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/fincept_icon.ico?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/78b8949139210eccd060d5ac6436d122af06229f",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/fincept_icon.ico"
+    }
+  },
+  {
+    "name": "funding.json",
+    "path": "funding.json",
+    "sha": "6843ac097415c9419693f5a6eee31f8cdfea0fe1",
+    "size": 3319,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/funding.json?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/funding.json",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/6843ac097415c9419693f5a6eee31f8cdfea0fe1",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/funding.json?token=CB3K7B7ATT4OCU6OF2NLJ6DKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/funding.json?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/6843ac097415c9419693f5a6eee31f8cdfea0fe1",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/funding.json"
+    }
+  },
+  {
+    "name": "images",
+    "path": "images",
+    "sha": "a4d25cc66c2b7e51450586b0b380e787de525d40",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/images?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/tree/main/images",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/a4d25cc66c2b7e51450586b0b380e787de525d40",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/images?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/trees/a4d25cc66c2b7e51450586b0b380e787de525d40",
+      "html": "https://github.com/Y-wln/FinceptTerminal/tree/main/images"
+    }
+  },
+  {
+    "name": "setup.sh",
+    "path": "setup.sh",
+    "sha": "677a64da5d4a7a3c7456441d6a1d131bb8994866",
+    "size": 11275,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/setup.sh?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/setup.sh",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/677a64da5d4a7a3c7456441d6a1d131bb8994866",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/setup.sh?token=CB3K7B6AHUIUROW575N25MDKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/setup.sh?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/677a64da5d4a7a3c7456441d6a1d131bb8994866",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/setup.sh"
+    }
+  },
+  {
+    "name": "updates.json",
+    "path": "updates.json",
+    "sha": "aa159acc43506283665d846c15b46c4830d71a42",
+    "size": 1760,
+    "url": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/updates.json?ref=main",
+    "html_url": "https://github.com/Y-wln/FinceptTerminal/blob/main/updates.json",
+    "git_url": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/aa159acc43506283665d846c15b46c4830d71a42",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/FinceptTerminal/main/updates.json?token=CB3K7B6XMSXXC6IOT2OO5A3KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/FinceptTerminal/contents/updates.json?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/FinceptTerminal/git/blobs/aa159acc43506283665d846c15b46c4830d71a42",
+      "html": "https://github.com/Y-wln/FinceptTerminal/blob/main/updates.json"
+    }
+  }
+]

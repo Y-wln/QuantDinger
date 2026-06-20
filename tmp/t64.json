@@ -1,0 +1,434 @@
+﻿[
+  {
+    "name": ".dockerignore",
+    "path": ".dockerignore",
+    "sha": "905b0b0b8914dfac7fac4984cb0bc20a5ab29602",
+    "size": 235,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/.dockerignore?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/.dockerignore",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/905b0b0b8914dfac7fac4984cb0bc20a5ab29602",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/.dockerignore?token=CB3K7B3FSBNTGOW5PWT7XETKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/.dockerignore?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/905b0b0b8914dfac7fac4984cb0bc20a5ab29602",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/.dockerignore"
+    }
+  },
+  {
+    "name": ".github",
+    "path": ".github",
+    "sha": "a64e31961bde5a125285e61b1944d7fcdc0ccdac",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/.github?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/.github",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/a64e31961bde5a125285e61b1944d7fcdc0ccdac",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/.github?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/a64e31961bde5a125285e61b1944d7fcdc0ccdac",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/.github"
+    }
+  },
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+    "size": 35149,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/LICENSE?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/LICENSE",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/LICENSE?token=CB3K7B2R6BHUPJZQWJO6HADKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/LICENSE?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/LICENSE"
+    }
+  },
+  {
+    "name": "README-Cherry-Studio.md",
+    "path": "README-Cherry-Studio.md",
+    "sha": "8c912e1eb535c59d35a86673870c647c1c56a1e5",
+    "size": 3575,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-Cherry-Studio.md?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/README-Cherry-Studio.md",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/8c912e1eb535c59d35a86673870c647c1c56a1e5",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/README-Cherry-Studio.md?token=CB3K7B2OUSR7CR6I7GDR363KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-Cherry-Studio.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/8c912e1eb535c59d35a86673870c647c1c56a1e5",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/README-Cherry-Studio.md"
+    }
+  },
+  {
+    "name": "README-EN.md",
+    "path": "README-EN.md",
+    "sha": "d774d6d0d48560af93217a0cb7942f058cb9d842",
+    "size": 151996,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-EN.md?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/README-EN.md",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/d774d6d0d48560af93217a0cb7942f058cb9d842",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/README-EN.md?token=CB3K7B7MKXY2VB7YVRHGNP3KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-EN.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/d774d6d0d48560af93217a0cb7942f058cb9d842",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/README-EN.md"
+    }
+  },
+  {
+    "name": "README-MCP-FAQ-EN.md",
+    "path": "README-MCP-FAQ-EN.md",
+    "sha": "f2f37d1a659f304054f2adb765de29380bed8b79",
+    "size": 29469,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-MCP-FAQ-EN.md?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/README-MCP-FAQ-EN.md",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/f2f37d1a659f304054f2adb765de29380bed8b79",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/README-MCP-FAQ-EN.md?token=CB3K7BYLZCDFT4USVBZCPN3KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-MCP-FAQ-EN.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/f2f37d1a659f304054f2adb765de29380bed8b79",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/README-MCP-FAQ-EN.md"
+    }
+  },
+  {
+    "name": "README-MCP-FAQ.md",
+    "path": "README-MCP-FAQ.md",
+    "sha": "5512a6d8051e3478e1475520ed021c2f2acaa3f6",
+    "size": 27505,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-MCP-FAQ.md?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/README-MCP-FAQ.md",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/5512a6d8051e3478e1475520ed021c2f2acaa3f6",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/README-MCP-FAQ.md?token=CB3K7B2WXGF43ZD7TXKYRFDKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README-MCP-FAQ.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/5512a6d8051e3478e1475520ed021c2f2acaa3f6",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/README-MCP-FAQ.md"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "8d13b95f9191213020ef50aeecab2bf4ff8b3834",
+    "size": 151852,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README.md?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/8d13b95f9191213020ef50aeecab2bf4ff8b3834",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/README.md?token=CB3K7BZEFOQ6SNXE5HPWCXLKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/8d13b95f9191213020ef50aeecab2bf4ff8b3834",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/README.md"
+    }
+  },
+  {
+    "name": "_image",
+    "path": "_image",
+    "sha": "0dd05fa5fb1a20a56b008c0750f71a57c33254fa",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/_image?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/_image",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/0dd05fa5fb1a20a56b008c0750f71a57c33254fa",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/_image?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/0dd05fa5fb1a20a56b008c0750f71a57c33254fa",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/_image"
+    }
+  },
+  {
+    "name": "config",
+    "path": "config",
+    "sha": "62f0da404928e8b0cef99b3dc695cc93e485a64a",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/config?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/config",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/62f0da404928e8b0cef99b3dc695cc93e485a64a",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/config?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/62f0da404928e8b0cef99b3dc695cc93e485a64a",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/config"
+    }
+  },
+  {
+    "name": "docker",
+    "path": "docker",
+    "sha": "014307f8abec1e28f25355f8689aca57ee0917dc",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/docker?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/docker",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/014307f8abec1e28f25355f8689aca57ee0917dc",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/docker?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/014307f8abec1e28f25355f8689aca57ee0917dc",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/docker"
+    }
+  },
+  {
+    "name": "docs",
+    "path": "docs",
+    "sha": "b3c850cf711382253ed7aa5ac7cbeb65468657e5",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/docs?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/docs",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/b3c850cf711382253ed7aa5ac7cbeb65468657e5",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/docs?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/b3c850cf711382253ed7aa5ac7cbeb65468657e5",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/docs"
+    }
+  },
+  {
+    "name": "index.html",
+    "path": "index.html",
+    "sha": "90ab5b9d9fa37a9d7a1a97d466a77e0c332584f0",
+    "size": 26844,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/index.html?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/index.html",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/90ab5b9d9fa37a9d7a1a97d466a77e0c332584f0",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/index.html?token=CB3K7B4J3AHOJVGQAMTIOGDKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/index.html?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/90ab5b9d9fa37a9d7a1a97d466a77e0c332584f0",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/index.html"
+    }
+  },
+  {
+    "name": "mcp_server",
+    "path": "mcp_server",
+    "sha": "307b65d0a7ebe0387224347d8dc30bab60f0fde5",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/mcp_server?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/mcp_server",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/307b65d0a7ebe0387224347d8dc30bab60f0fde5",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/mcp_server?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/307b65d0a7ebe0387224347d8dc30bab60f0fde5",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/mcp_server"
+    }
+  },
+  {
+    "name": "output",
+    "path": "output",
+    "sha": "5b372a93b4ae754bf8e89ae2b478ce8a70c13c13",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/output?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/output",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/5b372a93b4ae754bf8e89ae2b478ce8a70c13c13",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/output?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/5b372a93b4ae754bf8e89ae2b478ce8a70c13c13",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/output"
+    }
+  },
+  {
+    "name": "pyproject.toml",
+    "path": "pyproject.toml",
+    "sha": "d088c5d890639fcf917151eafca6ac8ea3e38d69",
+    "size": 676,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/pyproject.toml?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/pyproject.toml",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/d088c5d890639fcf917151eafca6ac8ea3e38d69",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/pyproject.toml?token=CB3K7B5IBY7M4EEC6PPSANTKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/pyproject.toml?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/d088c5d890639fcf917151eafca6ac8ea3e38d69",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/pyproject.toml"
+    }
+  },
+  {
+    "name": "requirements.txt",
+    "path": "requirements.txt",
+    "sha": "c4214d82a0baf7d9594fb13bd34f4ede8fc9fbff",
+    "size": 163,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/requirements.txt?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/requirements.txt",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/c4214d82a0baf7d9594fb13bd34f4ede8fc9fbff",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/requirements.txt?token=CB3K7B6YKJ3SW6E7FLXYAJDKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/requirements.txt?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/c4214d82a0baf7d9594fb13bd34f4ede8fc9fbff",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/requirements.txt"
+    }
+  },
+  {
+    "name": "setup-mac.sh",
+    "path": "setup-mac.sh",
+    "sha": "f6adec6ceac9e562a6be5d480419f3e252621ff1",
+    "size": 3798,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/setup-mac.sh?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/setup-mac.sh",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/f6adec6ceac9e562a6be5d480419f3e252621ff1",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/setup-mac.sh?token=CB3K7BYRR27THFQESHQ6263KERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/setup-mac.sh?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/f6adec6ceac9e562a6be5d480419f3e252621ff1",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/setup-mac.sh"
+    }
+  },
+  {
+    "name": "setup-windows-en.bat",
+    "path": "setup-windows-en.bat",
+    "sha": "35a9f8d931d18fb32d309f1a148e89fd323391bb",
+    "size": 4630,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/setup-windows-en.bat?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/setup-windows-en.bat",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/35a9f8d931d18fb32d309f1a148e89fd323391bb",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/setup-windows-en.bat?token=CB3K7BZ5UNNACJTUCLYYKLTKERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/setup-windows-en.bat?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/35a9f8d931d18fb32d309f1a148e89fd323391bb",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/setup-windows-en.bat"
+    }
+  },
+  {
+    "name": "setup-windows.bat",
+    "path": "setup-windows.bat",
+    "sha": "d34f3fa6d6efaaf700cb22786da31ae151a6834d",
+    "size": 4625,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/setup-windows.bat?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/setup-windows.bat",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/d34f3fa6d6efaaf700cb22786da31ae151a6834d",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/setup-windows.bat?token=CB3K7B4HJKVQQHXHTGX255TKERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/setup-windows.bat?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/d34f3fa6d6efaaf700cb22786da31ae151a6834d",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/setup-windows.bat"
+    }
+  },
+  {
+    "name": "start-http.bat",
+    "path": "start-http.bat",
+    "sha": "a4e30e7f75dd75ede0469ab2dd5ec31ccf4a1134",
+    "size": 644,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/start-http.bat?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/start-http.bat",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/a4e30e7f75dd75ede0469ab2dd5ec31ccf4a1134",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/start-http.bat?token=CB3K7B7WOKJ5VVLGB7UMFZLKERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/start-http.bat?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/a4e30e7f75dd75ede0469ab2dd5ec31ccf4a1134",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/start-http.bat"
+    }
+  },
+  {
+    "name": "start-http.sh",
+    "path": "start-http.sh",
+    "sha": "09e61a6e644ccab3390a77759a342def702d5aab",
+    "size": 729,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/start-http.sh?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/start-http.sh",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/09e61a6e644ccab3390a77759a342def702d5aab",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/start-http.sh?token=CB3K7B6IUSIBOAGT4MNNHU3KERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/start-http.sh?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/09e61a6e644ccab3390a77759a342def702d5aab",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/start-http.sh"
+    }
+  },
+  {
+    "name": "trendradar",
+    "path": "trendradar",
+    "sha": "dfc036d03a721abd8caf787e317b4e3866f14e6e",
+    "size": 0,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/trendradar?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/tree/main/trendradar",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/dfc036d03a721abd8caf787e317b4e3866f14e6e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/trendradar?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/trees/dfc036d03a721abd8caf787e317b4e3866f14e6e",
+      "html": "https://github.com/Y-wln/TrendRadar/tree/main/trendradar"
+    }
+  },
+  {
+    "name": "uv.lock",
+    "path": "uv.lock",
+    "sha": "353997dcb416e6f4fa962f461be5ad66bf12b283",
+    "size": 414560,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/uv.lock?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/uv.lock",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/353997dcb416e6f4fa962f461be5ad66bf12b283",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/uv.lock?token=CB3K7B5657WNMX2EC2JO2JLKERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/uv.lock?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/353997dcb416e6f4fa962f461be5ad66bf12b283",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/uv.lock"
+    }
+  },
+  {
+    "name": "version",
+    "path": "version",
+    "sha": "5f6c0863ac4bab1bf77c0dba5cc684d8492ce13f",
+    "size": 6,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/version?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/version",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/5f6c0863ac4bab1bf77c0dba5cc684d8492ce13f",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/version?token=CB3K7B5B5HEDWBMY3RXPWM3KERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/version?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/5f6c0863ac4bab1bf77c0dba5cc684d8492ce13f",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/version"
+    }
+  },
+  {
+    "name": "version_configs",
+    "path": "version_configs",
+    "sha": "2936f5094e641316f92b78306ae3af93d8716c12",
+    "size": 147,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/version_configs?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/version_configs",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/2936f5094e641316f92b78306ae3af93d8716c12",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/version_configs?token=CB3K7BZ36MPZ3XT3RRE5SC3KERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/version_configs?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/2936f5094e641316f92b78306ae3af93d8716c12",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/version_configs"
+    }
+  },
+  {
+    "name": "version_mcp",
+    "path": "version_mcp",
+    "sha": "7d666cb219c3e07eb766e7ad8b7f149ba7823ca7",
+    "size": 5,
+    "url": "https://api.github.com/repos/Y-wln/TrendRadar/contents/version_mcp?ref=main",
+    "html_url": "https://github.com/Y-wln/TrendRadar/blob/main/version_mcp",
+    "git_url": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/7d666cb219c3e07eb766e7ad8b7f149ba7823ca7",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/TrendRadar/main/version_mcp?token=CB3K7B6GMW7KQN6XUZ36LSLKERF3G",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/TrendRadar/contents/version_mcp?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/TrendRadar/git/blobs/7d666cb219c3e07eb766e7ad8b7f149ba7823ca7",
+      "html": "https://github.com/Y-wln/TrendRadar/blob/main/version_mcp"
+    }
+  }
+]

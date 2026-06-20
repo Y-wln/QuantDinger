@@ -1,0 +1,7 @@
+c = open("/home/ubuntu/scripts/agents/mercu_surge_rank.py").read()
+c = c.replace('track_signals(tracker_sigs, source="surge")', '# surge: info-only, no directional tracking')
+c = c.replace('emoji = "[L]" if s["dir"] == "long" else "[S]"', 'emoji = "[WATCH]"')
+c = c.replace('lines.append("    %s %s %dpt x%.1f%s" % (emoji, s["sym"], s["score"], s["accel"], price_str))', 'lines.append("    %s %s x%.1f%s" % (emoji, s["sym"], s["accel"], price_str))')
+c = c.replace('lines = ["----------------", "  Surge | %s" % t, "----------------"]', 'lines = ["----------------", "  Surge Watch | %s" % t, "----------------"]')
+open("/home/ubuntu/scripts/agents/mercu_surge_rank.py","w").write(c)
+print("patched")

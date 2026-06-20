@@ -1,0 +1,40 @@
+--- a/agents/agent_orchestrator.py
++++ b/agents/agent_orchestrator.py
+@@ -765,7 +765,9 @@
+                             r[:4], cascade=cascade_level)
+ 
+             except Exception as e:
+-                pass
++                import traceback
++                print(f"  [SIGNAL ERROR] {sym}: {e}", flush=True)
++                traceback.print_exc()
+         # Summary of filtered signals
+         # ====== Pipeline tracking: record every signal's complete journey ======
+         for s in signals:
+@@ -634,7 +634,7 @@
+                     except Exception:
+                         pass
+                     if not fng_ok:
+-                except Exception: pass
++                except (ValueError, KeyError, TypeError): pass
+ 
+                 # Check leading_confirm result (already computed above)
+                 if not sig.get("confirmed", False):
+@@ -723,7 +723,7 @@
+                             price = opt_price
+                             sl_pct_adj = sl_pct
+                     except Exception: pass
+-                    except Exception: pass
++                    except (ValueError, KeyError, TypeError): pass
+ 
+                     ok, msg = self.position.open_position(
+                         sym, direction, price, score, cvd, sl_pct, tp_pct,
+@@ -743,7 +743,7 @@
+                               extras={'decision': 'pending_open'})
+                     except:
+                         pass
+-                    except Exception: pass
++                    except (ValueError, KeyError, TypeError): pass
+         filtered = [s for s in signals if s.get('_skip_reason')]
+         if filtered:
+             parts = []

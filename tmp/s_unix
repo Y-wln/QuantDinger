@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+    python3
+else
+    echo "$1" | base64 -d | python3
+fi

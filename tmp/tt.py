@@ -1,0 +1,1 @@
+import urllib.request,json,time;t0=time.time();proxy=urllib.request.ProxyHandler({"http":"http://127.0.0.1:7891","https":"http://127.0.0.1:7891"});o=urllib.request.build_opener(proxy);d=json.loads(o.open("https://fapi.binance.com/fapi/v1/ticker/24hr",timeout=15).read());print("got",len(d),"in",round(time.time()-t0,1),"s")

@@ -1,0 +1,98 @@
+﻿[
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "cc14602c6e78195bb3857b07ff0b216e2f0cb48c",
+    "size": 1161,
+    "url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/README.md?ref=main",
+    "html_url": "https://github.com/Y-wln/crypto-trading-tools/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/cc14602c6e78195bb3857b07ff0b216e2f0cb48c",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/crypto-trading-tools/main/README.md?token=CB3K7B4QEJIENGOOTD6XGSTKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/cc14602c6e78195bb3857b07ff0b216e2f0cb48c",
+      "html": "https://github.com/Y-wln/crypto-trading-tools/blob/main/README.md"
+    }
+  },
+  {
+    "name": "analyze.py",
+    "path": "analyze.py",
+    "sha": "9d339ebef0ae9aaf83409efbfcea83c160811689",
+    "size": 46144,
+    "url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/analyze.py?ref=main",
+    "html_url": "https://github.com/Y-wln/crypto-trading-tools/blob/main/analyze.py",
+    "git_url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/9d339ebef0ae9aaf83409efbfcea83c160811689",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/crypto-trading-tools/main/analyze.py?token=CB3K7B2CFLV2Q3YOYXXPA5TKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/analyze.py?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/9d339ebef0ae9aaf83409efbfcea83c160811689",
+      "html": "https://github.com/Y-wln/crypto-trading-tools/blob/main/analyze.py"
+    }
+  },
+  {
+    "name": "backtest_v2.py",
+    "path": "backtest_v2.py",
+    "sha": "6eb98935febc98b0df0b6f70eb7ce7783e2f05d1",
+    "size": 18690,
+    "url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/backtest_v2.py?ref=main",
+    "html_url": "https://github.com/Y-wln/crypto-trading-tools/blob/main/backtest_v2.py",
+    "git_url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/6eb98935febc98b0df0b6f70eb7ce7783e2f05d1",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/crypto-trading-tools/main/backtest_v2.py?token=CB3K7B6RWKZO6UEI2SOVNGLKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/backtest_v2.py?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/6eb98935febc98b0df0b6f70eb7ce7783e2f05d1",
+      "html": "https://github.com/Y-wln/crypto-trading-tools/blob/main/backtest_v2.py"
+    }
+  },
+  {
+    "name": "paper_trader.py",
+    "path": "paper_trader.py",
+    "sha": "98fd8f03352cfe4a23d9b71e11b9ff1edac61db5",
+    "size": 48248,
+    "url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/paper_trader.py?ref=main",
+    "html_url": "https://github.com/Y-wln/crypto-trading-tools/blob/main/paper_trader.py",
+    "git_url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/98fd8f03352cfe4a23d9b71e11b9ff1edac61db5",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/crypto-trading-tools/main/paper_trader.py?token=CB3K7B6Q4WMLCGSSK54O2ULKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/paper_trader.py?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/98fd8f03352cfe4a23d9b71e11b9ff1edac61db5",
+      "html": "https://github.com/Y-wln/crypto-trading-tools/blob/main/paper_trader.py"
+    }
+  },
+  {
+    "name": "paper_trader_multi.py",
+    "path": "paper_trader_multi.py",
+    "sha": "883b8129d0d2ff34b32f553aa50f5e178c36b75b",
+    "size": 9024,
+    "url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/paper_trader_multi.py?ref=main",
+    "html_url": "https://github.com/Y-wln/crypto-trading-tools/blob/main/paper_trader_multi.py",
+    "git_url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/883b8129d0d2ff34b32f553aa50f5e178c36b75b",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/crypto-trading-tools/main/paper_trader_multi.py?token=CB3K7BYYT42C3BLD4NZUBZTKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/paper_trader_multi.py?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/883b8129d0d2ff34b32f553aa50f5e178c36b75b",
+      "html": "https://github.com/Y-wln/crypto-trading-tools/blob/main/paper_trader_multi.py"
+    }
+  },
+  {
+    "name": "smc_analyzer.py",
+    "path": "smc_analyzer.py",
+    "sha": "75016baf392a3a860e9ee71ed27d7440a3bd8414",
+    "size": 93744,
+    "url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/smc_analyzer.py?ref=main",
+    "html_url": "https://github.com/Y-wln/crypto-trading-tools/blob/main/smc_analyzer.py",
+    "git_url": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/75016baf392a3a860e9ee71ed27d7440a3bd8414",
+    "download_url": "https://raw.githubusercontent.com/Y-wln/crypto-trading-tools/main/smc_analyzer.py?token=CB3K7B3NJ7AWDKA3PP2ZO7LKERF3E",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/Y-wln/crypto-trading-tools/contents/smc_analyzer.py?ref=main",
+      "git": "https://api.github.com/repos/Y-wln/crypto-trading-tools/git/blobs/75016baf392a3a860e9ee71ed27d7440a3bd8414",
+      "html": "https://github.com/Y-wln/crypto-trading-tools/blob/main/smc_analyzer.py"
+    }
+  }
+]

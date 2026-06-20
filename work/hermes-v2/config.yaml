@@ -1,0 +1,70 @@
+﻿# Hermes V2 Configuration
+# ========================
+
+mode: dry-run                    # dry-run | live
+live_trade: false                # set true only after dry-run validation
+
+# Trading
+max_positions: 8
+signal_threshold: 25             # minimum score to generate signal
+scan_interval: 60                # seconds
+order_size_usdt: 50              # per trade
+
+# Coins
+scan_coins:
+  - BTCUSDT
+  - ETHUSDT
+  - SOLUSDT
+  - BNBUSDT
+  - XRPUSDT
+  - ADAUSDT
+  - DOGEUSDT
+  - LINKUSDT
+  - AVAXUSDT
+  - DOTUSDT
+  - LTCUSDT
+  - INJUSDT
+  - APTUSDT
+  - FETUSDT
+  - AAVEUSDT
+  - TRUMPUSDT
+  - DASHUSDT
+  - ZECUSDT
+  - WLDUSDT
+  - HYPEUSDT
+
+trade_coins:
+  - DOGEUSDT
+  - ADAUSDT
+  - BTCUSDT
+  - BNBUSDT
+  - AVAXUSDT
+  - INJUSDT
+  - SOLUSDT
+  - XRPUSDT
+  - ETHUSDT
+  - FETUSDT
+  - TRUMPUSDT
+
+# Risk
+max_daily_loss_pct: 5            # stop all trading if daily loss exceeds this
+hard_sl_pct: 0.08                # 8% hard stop loss
+tp_pct: 0.05                     # 5% take profit
+trailing_sl: true
+
+# Exchange
+exchange_sl: true                # place SL on exchange (survives crash)
+api_retries: 3
+api_timeout: 10                  # seconds
+
+# Data sources
+use_mercu: true                  # MerCu real-time data
+use_jin10: true                  # macro news
+use_liq_ws: true                 # liquidation WebSocket
+
+# Paths
+data_dir: ~/hermes-v2/data
+log_dir: ~/hermes-v2/logs
+
+# Feishu
+feishu_webhook: ""               # set via env or fill in
