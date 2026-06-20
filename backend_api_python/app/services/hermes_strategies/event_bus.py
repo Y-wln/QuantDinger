@@ -32,6 +32,10 @@ class EventType(Enum):
     ORDER_FILLED = "order_filled"         # Exchange confirmed fill
     ORDER_REJECTED = "order_rejected"     # Exchange rejected order
 
+    # Position events
+    POSITION_OPENED = "position_opened"     # Position opened
+    POSITION_CLOSED = "position_closed"     # Position closed
+
     # Risk events  
     RISK_BLOCKED = "risk_blocked"         # RiskEngine blocked a trade
     CIRCUIT_BREAKER = "circuit_breaker"   # Circuit breaker tripped
@@ -148,3 +152,4 @@ def on(event_type: EventType):
         EventBus.get().subscribe(event_type, func)
         return func
     return decorator
+

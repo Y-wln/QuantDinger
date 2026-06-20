@@ -23,6 +23,7 @@ from typing import Optional
 from .base import BaseStrategy, StrategySignal, BJT
 from .event_bus import EventBus, Event, EventType, on
 from .risk_engine import RiskEngine, RiskConfig, RiskVerdict, CircuitBreaker
+from .position_manager import PositionManager, Position
 from .runner import HermesRunner, HealthReporter, ComponentHealth
 
 # Strategy imports
@@ -88,5 +89,102 @@ __all__ = [
     "get_all_strategies", "get_dag", "create_runner", "init_subscribers",
     "init_subscribers",
 ]
+
+
+
+
+# ── V3 Startup (replaces hermes_strategy_service.py) ──────────
+
+_hermes_v3_runner: Optional[object] = None
+_hermes_v3_started: bool = False
+
+def start_hermes_v3():
+    """Start Hermes V3 trading system.
+    
+    Wires together:
+      MerCuDataBridge → EventBus → Strategies → RiskEngine → QD Bridge
+    Called once at QD app startup.
+    """
+    global _hermes_v3_runner, _hermes_v3_started
+    if _hermes_v3_started:
+        return
+    
+    import os, logging, threading
+    _log = logging.getLogger(__name__)
+    
+    # Avoid double-start with Flask reloader
+    debug = os.getenv("PYTHON_API_DEBUG", "false").lower() == "true"
+    if debug and os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+        return
+    
+    try:
+        # 1. Init subscribers (Feishu, logging, health)
+        init_subscribers()
+        
+        # 2. Import PositionManager + create runner with strategies
+        from .position_manager import PositionManager
+        EventBus.reset()
+        RiskEngine.reset()
+        PositionManager.reset()
+        
+        runner = HermesRunner()
+        runner.load_from_registry()
+        
+        # 3. Start MerCu data bridge in background thread
+        from .hermes_daemon import MerCuDataBridge
+        bridge = MerCuDataBridge()
+        
+        def mercu_poll_loop():
+            while runner._running if hasattr(runner, "_running") else True:
+                try:
+                    data = bridge.fetch()
+                    bus = EventBus.get()
+                    bus.emit(Event(type=EventType.MERCU_DATA, data=data, source="mercu_bridge"))
+                    runner._run_cycle(mercu_data_provider=lambda: data)
+                except Exception as e:
+                    _log.error(f"MerCu poll error: {e}")
+                import time; time.sleep(30)
+        
+        runner._running = True
+        poll_thread = threading.Thread(target=mercu_poll_loop, daemon=True, name="mercu-poll")
+        poll_thread.start()
+        
+        # 4. Start health reporter
+        health = HealthReporter(runner, interval_seconds=60)
+        health.start()
+        
+        # 5. Wire QD bridge (auto-execution, notifications, portfolio)
+        from .hermes_qd_bridge import integrate_with_quantdinger
+        bridge_result = integrate_with_quantdinger()
+        
+        _hermes_v3_runner = runner
+        _hermes_v3_started = True
+        
+        _log.info(f"Hermes V3 started: strategies={len(get_all_strategies())}, "
+                  f"bridge={bridge_result.get('execution','unknown')}")
+    except Exception as e:
+        _log.error(f"Hermes V3 startup failed: {e}", exc_info=True)
+
+
+def get_hermes_v3_status() -> dict:
+    """Get V3 system status."""
+    global _hermes_v3_runner, _hermes_v3_started
+    if not _hermes_v3_started:
+        return {"status": "not_started"}
+    try:
+        from .position_manager import PositionManager
+        pm = PositionManager.get()
+        risk = RiskEngine.get()
+        bus = EventBus.get()
+        return {
+            "status": "running",
+            "positions": pm.get_status(),
+            "risk": risk.get_status(),
+            "event_bus_subscribers": bus.subscriber_count(),
+            "event_bus_errors": bus.get_error_counts(),
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
 
 
