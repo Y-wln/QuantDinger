@@ -373,10 +373,10 @@ def create_app(config_name='default'):
                 start_reflection_worker()
             except Exception:
                 pass
-            # Hermes strategy service: MerCu signal-driven trading
+            # Hermes V3 strategy service: event-driven MerCu signal trading
             try:
-                from app.services.hermes_strategy_service import start_hermes_strategy_service
-                start_hermes_strategy_service()
+                from app.services.hermes_strategies import start_hermes_v3
+                start_hermes_v3()
             except Exception:
                 pass
 
