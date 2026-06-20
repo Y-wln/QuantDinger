@@ -281,10 +281,10 @@ def get_backtest_accuracy():
 def get_yaobi():
     """Get yaobi (妖币) signals."""
     try:
-        from app.services.hermes_strategies.demon_v2 import DemonV2
+        from app.services.hermes_strategies.demon_v3 import DemonV3
         engine = _get_engine()
         data = engine.get_all_data() if engine else {}
-        strategy = DemonV2()
+        strategy = DemonV3()
         signals = strategy.generate(data)
         return jsonify({
             "ok": True,
@@ -302,10 +302,10 @@ def trigger_yaobi_scan():
     try:
         body = request.get_json(silent=True) or {}
         symbol = body.get("symbol", "")
-        from app.services.hermes_strategies.demon_v2 import DemonV2
+        from app.services.hermes_strategies.demon_v3 import DemonV3
         engine = _get_engine()
         data = engine.get_all_data() if engine else {}
-        strategy = DemonV2()
+        strategy = DemonV3()
         signals = strategy.generate(data)
         if symbol:
             signals = [s for s in signals if s.symbol.upper() == symbol.upper()]
@@ -346,10 +346,10 @@ def get_lightning():
 def get_ambush():
     """Get ambush (埋伏) signals."""
     try:
-        from app.services.hermes_strategies.ambush_v2 import AmbushV2
+        from app.services.hermes_strategies.ambush_v3 import AmbushV3
         engine = _get_engine()
         data = engine.get_all_data() if engine else {}
-        strategy = AmbushV2()
+        strategy = AmbushV3()
         signals = strategy.generate(data)
         return jsonify({
             "ok": True,
@@ -406,3 +406,4 @@ def get_tracker_closed():
         return jsonify({"ok": True, "count": len(closed), "closed": closed})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+

@@ -28,15 +28,16 @@ from .runner import HermesRunner, HealthReporter, ComponentHealth
 
 # Strategy imports
 from .dag_v2 import DAGConsensusV2
-from .ambush_v2 import AmbushV2
-from .demon_v2 import DemonV2
+from .ambush_v3 import AmbushV3
+from .demon_v3 import DemonV3
+from .early_signals import (run_all_early_signals, get_early_entry_score, classify_stage)
 # lightning_v2 disabled - backtest showed 12-33% accuracy
 
 # ── Strategy Registry ──────────────────────────────────────
 
 STRATEGIES = [
-    DemonV2(),      # 妖币猎手
-    AmbushV2(),     # 埋伏策略
+    DemonV3(),      # 妖币猎手
+    AmbushV3(),     # 埋伏策略
 ]
 
 DAG = DAGConsensusV2()
@@ -84,7 +85,7 @@ __all__ = [
     "EventBus", "Event", "EventType", "on",
     "RiskEngine", "RiskConfig", "RiskVerdict", "CircuitBreaker",
     "HermesRunner", "HealthReporter", "ComponentHealth",
-    "DemonV2", "AmbushV2", "DAGConsensusV2",
+    "DemonV3", "AmbushV3", "DAGConsensusV2",
     "STRATEGIES", "DAG",
     "get_all_strategies", "get_dag", "create_runner", "init_subscribers",
     "init_subscribers",
@@ -185,6 +186,7 @@ def get_hermes_v3_status() -> dict:
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
 
 
 
