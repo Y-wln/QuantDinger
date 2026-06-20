@@ -51,7 +51,7 @@ def get_dag():
 
 def create_runner(mercu_fetcher=None, risk_config: Optional[RiskConfig] = None) -> HermesRunner:
     """Create a fully configured runner with all modules wired."""
-    EventBus.reset()
+    # NOTE: Do NOT EventBus.reset() here - it kills subscribers
     RiskEngine.reset()
 
     bus = EventBus.get()
@@ -80,3 +80,4 @@ __all__ = [
     "STRATEGIES", "DAG",
     "get_all_strategies", "get_dag", "create_runner",
 ]
+

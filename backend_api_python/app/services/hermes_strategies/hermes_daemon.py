@@ -140,9 +140,8 @@ def run_hermes(
     logger.info("Hermes V3 Starting - Event-Driven Architecture")
     logger.info("=" * 50)
 
-    # 1. Reset singletons for clean start
-    EventBus.reset()
-    RiskEngine.reset()
+    # 1. Get singletons (DO NOT reset - preserves subscriber registrations)
+    # EventBus.reset() is only for tests; in production we keep subscribers alive
 
     bus = EventBus.get()
     risk = RiskEngine.get(risk_config or RiskConfig())
@@ -228,3 +227,4 @@ def run_hermes(
 # ── Run directly ─────────────────────────────────────────────
 if __name__ == "__main__":
     run_hermes()
+
