@@ -45,15 +45,20 @@ class MerCuDataBridge:
 
     @property
     def engine(self):
-        """Lazy-load HermesSignalEngine from hermes_mercu."""
+        """Lazy-load HermesSignalEngine from hermes_mercu with retry on failure."""
         if self._engine is None:
             try:
                 from app.data_providers.hermes_mercu import get_hermes_engine
                 self._engine = get_hermes_engine()
+                logger.info("HermesSignalEngine loaded")
             except Exception as e:
-                logger.error(f"Failed to load HermesSignalEngine: {e}")
+                logger.warning(f"Failed to load HermesSignalEngine (will retry): {e}")
                 return None
         return self._engine
+    
+    def reset_engine(self):
+        """Force engine reload (call after repeated failures)."""
+        self._engine = None
 
     def fetch(self) -> dict:
         """Fetch ALL MerCu endpoints. Returns complete data dict."""
@@ -379,6 +384,7 @@ def run_hermes(
 # ── Run directly ─────────────────────────────────────────────
 if __name__ == "__main__":
     run_hermes()
+
 
 
 
