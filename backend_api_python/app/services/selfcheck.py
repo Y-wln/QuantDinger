@@ -169,7 +169,7 @@ class SelfCheck:
                 with get_db_connection() as db:
                     cur = db.cursor()
                     cur.execute("SELECT COUNT(*) FROM qd_exchange_credentials")
-                    db_count = cur.fetchone()[0]
+                    row = cur.fetchone(); db_count = row[0] if row else 0
                     cur.close()
                 if db_count > 0 and not configured:
                     configured.append(f"DB({db_count})")
