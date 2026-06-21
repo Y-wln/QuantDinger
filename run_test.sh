@@ -1,0 +1,1 @@
+cd /app && python3 -c 'import sys; sys.path.insert(0, chr(34)+chr(47)+chr(97)+chr(112)+chr(112)+chr(34)); from app.data_providers.hermes_mercu import get_hermes_engine; e=get_hermes_engine(); a=e.get_anomalies(100); print(len(a))'

@@ -323,28 +323,7 @@ class MerCuClient:
                             self.session.headers["Authorization"] = f"Bearer {t}"
                             break
                 except: pass
-        
-        # Map paths to cache filenames
-        cache_map = {
-            "anomaly-v4": "mercu_anomalies.json",
-            "momentum": "mercu_momentum.json",
-            "surge": "mercu_surge.json",
-        }
-        
-        # Try cache first if circuit is open
         if self.circuit.is_open:
-            for key, fname in cache_map.items():
-                if key in path:
-                    for cache_dir in [self._data_token_file.replace("mercu_live_token.txt", ""), "/tmp/"]:
-                        cf = os.path.join(cache_dir, fname)
-                        if os.path.exists(cf):
-                            try:
-                                with open(cf) as f:
-                                    data = json.loads(f.read())
-                                    if data:
-                                        logger.info(f"MerCu cache hit: {fname} ({len(str(data))}B)")
-                                        return data
-                            except Exception as e2: logger.debug(f"cache miss {cache_dir}/{fname}: {e2}")
             logger.warning(f"Circuit breaker open, skipping: {path}")
             return {}
 
@@ -357,19 +336,6 @@ class MerCuClient:
         except requests.RequestException as e:
             self.circuit.record_failure()
             logger.warning(f"MerCu API failed: {path} - {e}")
-            # Fall back to cache
-            for key, fname in cache_map.items():
-                if key in path:
-                    for cache_dir in [self._data_token_file.replace("mercu_live_token.txt", ""), "/tmp/"]:
-                        cf = os.path.join(cache_dir, fname)
-                        if os.path.exists(cf):
-                            try:
-                                with open(cf) as f:
-                                    data = json.loads(f.read())
-                                    if data:
-                                        logger.info(f"MerCu fallback cache: {fname} ({len(str(data))}B)")
-                                        return data
-                            except Exception as e2: logger.debug(f"cache miss {cache_dir}/{fname}: {e2}")
             return {}
 
     def get_anomalies(self, limit: int = 100) -> List[dict]:

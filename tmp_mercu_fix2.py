@@ -344,7 +344,7 @@ class MerCuClient:
                                     if data:
                                         logger.info(f"MerCu cache hit: {fname} ({len(str(data))}B)")
                                         return data
-                            except Exception as e2: logger.debug(f"cache miss {cache_dir}/{fname}: {e2}")
+                            except: pass
             logger.warning(f"Circuit breaker open, skipping: {path}")
             return {}
 
@@ -369,7 +369,7 @@ class MerCuClient:
                                     if data:
                                         logger.info(f"MerCu fallback cache: {fname} ({len(str(data))}B)")
                                         return data
-                            except Exception as e2: logger.debug(f"cache miss {cache_dir}/{fname}: {e2}")
+                            except: pass
             return {}
 
     def get_anomalies(self, limit: int = 100) -> List[dict]:
