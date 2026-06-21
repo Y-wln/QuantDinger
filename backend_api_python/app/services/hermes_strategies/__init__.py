@@ -19,6 +19,7 @@ Usage:
   runner.load_from_registry()
   runner.start(mercu_data_provider=your_data_func)
 """
+import time
 from typing import Optional
 from .base import BaseStrategy, StrategySignal, BJT
 from .event_bus import EventBus, Event, EventType, on

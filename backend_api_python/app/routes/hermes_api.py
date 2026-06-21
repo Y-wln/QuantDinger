@@ -408,3 +408,37 @@ def get_tracker_closed():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
+
+
+@hermes_bp.route("/mercu-token", methods=["POST"])
+def mercu_token():
+    try:
+        data = request.get_json(silent=True) or {}
+        token = (data.get("token") or "").strip()
+        if not token:
+            return jsonify({"ok": False, "error": "empty token"}), 400
+        paths = ["/app/data/mercu_live_token.txt", "/tmp/mercu_live_token.txt"]
+        written = 0
+        for p in paths:
+            try:
+                os.makedirs(os.path.dirname(p), exist_ok=True)
+                with open(p, "w") as f:
+                    f.write(token)
+                written += 1
+            except Exception:
+                pass
+        cb_reset = False
+        try:
+            from app.data_providers.hermes_mercu import get_hermes_engine
+            engine = get_hermes_engine()
+            if engine and engine.client:
+                engine.client.token = token
+                engine.client.session.headers["Authorization"] = f"Bearer {token}"
+                engine.client.circuit.record_success()
+                cb_reset = True
+                logger.info("MerCu token updated + circuit breaker reset")
+        except Exception as e:
+            logger.warning(f"MerCu token: engine update failed: {e}")
+        return jsonify({"ok": True, "written": written, "len": len(token), "cb_reset": cb_reset})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
