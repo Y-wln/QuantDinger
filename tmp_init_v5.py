@@ -24,7 +24,7 @@ from .base import BaseStrategy, StrategySignal, BJT
 from .event_bus import EventBus, Event, EventType, on
 from .risk_engine import RiskEngine, RiskConfig, RiskVerdict, CircuitBreaker
 from .position_manager import PositionManager, Position
-from .signal_tracker import SignalTracker, get_tracker
+from .signal_tracker import SignalTracker
 from .runner import HermesRunner, HealthReporter, ComponentHealth
 
 # Strategy imports
@@ -204,7 +204,7 @@ def start_hermes_v3():
         
         # Start signal tracker components
         try:
-            st = get_tracker()
+            st = SignalTracker.get()
             pt = st._price_tracker
             if pt:
                 pt._running = True
@@ -237,7 +237,7 @@ _poll_thread = None
 def _get_price_tracker():
     """Lazy-load PriceTracker singleton."""
     try:
-        return get_tracker()._price_tracker
+        return SignalTracker.get()._price_tracker
     except Exception:
         return None
 def get_hermes_v3_status() -> dict:

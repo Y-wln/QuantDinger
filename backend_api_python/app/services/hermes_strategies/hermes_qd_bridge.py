@@ -53,18 +53,20 @@ def _get_exchange_client(exchange_id: str = "binance", market_type: str = "swap"
         
         # Detect testnet mode
         is_testnet = os.getenv(f"{exchange_id.upper()}_TESTNET", "").lower() == "true"
-        config = {}
+        
+        # Build exchange_config dict (factory API)
+        exchange_config = {
+            "exchange_id": exchange_id,
+            "api_key": creds.get("api_key", ""),
+            "secret_key": creds.get("secret_key", ""),
+            "passphrase": creds.get("passphrase", ""),
+            "market_type": mt,
+        }
         if is_testnet:
-            config["use_testnet"] = True
+            exchange_config["use_testnet"] = True
             logger.info(f"Using {exchange_id} TESTNET")
         
-        return create_client(
-            exchange_id=exchange_id, market_type=mt,
-            api_key=creds.get("api_key", ""),
-            secret_key=creds.get("secret_key", ""),
-            passphrase=creds.get("passphrase", ""),
-            exchange_config=config,
-        )
+        return create_client(exchange_config=exchange_config, market_type=mt)
     except Exception as e:
         logger.error(f"Exchange client creation failed: {e}")
         return None
@@ -417,5 +419,6 @@ def get_bridge_status() -> dict:
         "executor_subscribed": _qd_bridge_executor._subscribed if _qd_bridge_executor else False,
         "module_version": "V3",
     }
+
 
 

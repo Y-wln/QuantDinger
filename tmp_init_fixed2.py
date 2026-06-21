@@ -24,7 +24,7 @@ from .base import BaseStrategy, StrategySignal, BJT
 from .event_bus import EventBus, Event, EventType, on
 from .risk_engine import RiskEngine, RiskConfig, RiskVerdict, CircuitBreaker
 from .position_manager import PositionManager, Position
-from .signal_tracker import SignalTracker, get_tracker
+from .signal_tracker import SignalTracker
 from .runner import HermesRunner, HealthReporter, ComponentHealth
 
 # Strategy imports
@@ -92,20 +92,26 @@ __all__ = [
     "init_subscribers",
 ]
 
+
+
+
 # ── V3 Startup (replaces hermes_strategy_service.py) ──────────
 
 _hermes_v3_runner: Optional[object] = None
 _hermes_v3_started: bool = False
 
 def start_hermes_v3():
-    """Start/ensure Hermes V3 trading system is running.
+    """Start Hermes V3 trading system.
     
-    Idempotent: checks if poll thread is alive, restarts if dead.
-    Same pattern as PendingOrderWorker in QD.
+    Wires together:
+      MerCuDataBridge → EventBus → Strategies → RiskEngine → QD Bridge
+    Called once at QD app startup.
     """
-    global _hermes_v3_runner, _hermes_v3_started, _poll_thread
+    global _hermes_v3_runner, _hermes_v3_started
+    if _hermes_v3_started:
+        return
     
-    import os, logging, threading, time as _time
+    import os, logging, threading
     _log = logging.getLogger(__name__)
     
     # Avoid double-start with Flask reloader
@@ -113,15 +119,11 @@ def start_hermes_v3():
     if debug and os.environ.get("WERKZEUG_RUN_MAIN") != "true":
         return
     
-    # Check if already running
-    if _hermes_v3_started and _poll_thread is not None and _poll_thread.is_alive():
-        return
-    
     try:
         # 1. Init subscribers (Feishu, logging, health)
         init_subscribers()
         
-        # 2. Setup components
+        # 2. Import PositionManager + create runner with strategies
         from .position_manager import PositionManager
         EventBus.reset()
         RiskEngine.reset()
@@ -129,17 +131,14 @@ def start_hermes_v3():
         
         runner = HermesRunner()
         runner.load_from_registry()
-        runner._running = True
         
-        # 3. MerCu data bridge
+        # 3. Start MerCu data bridge in background thread
         from .hermes_daemon import MerCuDataBridge
         bridge = MerCuDataBridge()
         
-        _pc = {"count": 0, "errors": 0, "empty_streak": 0}
-        
         def mercu_poll_loop():
             _log.info("MerCu poll thread started")
-            while runner._running:
+            while True:
                 try:
                     data = bridge.fetch()
                     _pc["count"] += 1
@@ -153,93 +152,56 @@ def start_hermes_v3():
                     if not has_signals:
                         _pc["empty_streak"] += 1
                         if _pc["empty_streak"] <= 3 or _pc["empty_streak"] % 10 == 0:
-                            _log.info(f"Poll #{_pc['count']}: {artifact_count} arts, 0 sigs (streak={_pc['empty_streak']})")
+                            _log.info(f"MerCu poll #{_pc["count"]}: {artifact_count} arts, 0 sigs (streak={_pc["empty_streak"]})")
                     else:
                         _pc["empty_streak"] = 0
-                        _log.info(f"Poll #{_pc['count']}: {artifact_count} arts, has_signals")
+                        _log.info(f"MerCu poll #{_pc["count"]}: {artifact_count} arts, has_signals")
                     
                     bus = EventBus.get()
                     bus.emit(Event(type=EventType.MERCU_DATA, data=data, source="mercu_bridge"))
-                    
-                    # Feed prices to tracker
-                    try:
-                        pt = _get_price_tracker()
-                        if pt:
-                            pt.update_from_mercu(data)
-                            # Also emit MARKET_DATA for each symbol with price
-                            for sym, px in pt._prices.items():
-                                if px and px > 0:
-                                    bus.emit(Event(type=EventType.MARKET_DATA, data={"symbol": sym, "price": px}, source="mercu"))
-                    except Exception:
-                        pass
                     
                     if bridge.engine:
                         engine_signals = bridge.engine.generate_signals()
                         if engine_signals:
                             _log.info(f"Engine signals: {len(engine_signals)}")
+                            data["engine_signals"] = engine_signals
                             for es in engine_signals:
                                 bus.emit(Event(type=EventType.SIGNAL_GENERATED, data=es, source="engine"))
-                                # Feed signal prices to tracker
-                                if es.get("price"):
-                                    try:
-                                        pt2 = _get_price_tracker()
-                                        if pt2:
-                                            pt2.update_price(es["symbol"], float(es["price"]))
-                                    except Exception:
-                                        pass
                     
                     runner._run_cycle(mercu_data_provider=lambda: data)
                     _pc["errors"] = 0
                 except Exception as e:
                     _pc["errors"] += 1
-                    _log.error(f"Poll err (c={_pc['count']} e={_pc['errors']}): {e}")
+                    _log.error(f"MerCu poll err (c={_pc["count"]} e={_pc["errors"]}): {e}")
                     if _pc["errors"] > 10:
                         _log.critical("10+ errs, resetting bridge")
                         bridge.reset_engine()
                         _pc["errors"] = 0
-                    _time.sleep(30)
-                else:
-                    _time.sleep(30)
-            _log.warning("Poll loop exited (runner._running=False)")
+                time.sleep(30)
+        _pc = {"count": 0, "errors": 0, "empty_streak": 0}
         
-        # Start signal tracker components
-        try:
-            st = get_tracker()
-            pt = st._price_tracker
-            if pt:
-                pt._running = True
-                _log.info("PriceTracker activated")
-        except Exception as e:
-            _log.warning(f"PriceTracker init: {e}")
+        runner._running = True
+        poll_thread = threading.Thread(target=mercu_poll_loop, daemon=True, name="mercu-poll")
+        poll_thread.start()
+                watchdog_thread.start()
         
-        _poll_thread = threading.Thread(target=mercu_poll_loop, daemon=True, name="mercu-poll")
-        _poll_thread.start()
-        
-        # 4. Health reporter
+        # 4. Start health reporter
         health = HealthReporter(runner, interval_seconds=60)
         health.start()
         
-        # 5. Wire QD bridge
+        # 5. Wire QD bridge (auto-execution, notifications, portfolio)
         from .hermes_qd_bridge import integrate_with_quantdinger
         bridge_result = integrate_with_quantdinger()
         
         _hermes_v3_runner = runner
         _hermes_v3_started = True
         
-        _log.info(f"Hermes V3 started: strategies={len(get_all_strategies())}, bridge={bridge_result.get('execution','unknown')}")
+        _log.info(f"Hermes V3 started: strategies={len(get_all_strategies())}, "
+                  f"bridge={bridge_result.get('execution','unknown')}")
     except Exception as e:
         _log.error(f"Hermes V3 startup failed: {e}", exc_info=True)
 
 
-# Track poll thread for health checks
-_poll_thread = None
-
-def _get_price_tracker():
-    """Lazy-load PriceTracker singleton."""
-    try:
-        return get_tracker()._price_tracker
-    except Exception:
-        return None
 def get_hermes_v3_status() -> dict:
     """Get V3 system status."""
     global _hermes_v3_runner, _hermes_v3_started
@@ -259,4 +221,9 @@ def get_hermes_v3_status() -> dict:
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+
+
+
+
 

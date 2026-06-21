@@ -13,7 +13,7 @@ import os
 
 BJT = timezone(timedelta(hours=8))
 logger = logging.getLogger(__name__)
-hermes_bp = Blueprint("hermes", __name__)
+hermes_bp = Blueprint("hermes_v3", __name__)
 
 
 # ── Helpers ───────────────────────────────────────────────────
@@ -406,4 +406,5 @@ def get_tracker_closed():
         return jsonify({"ok": True, "count": len(closed), "closed": closed})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
 

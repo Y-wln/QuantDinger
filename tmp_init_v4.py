@@ -24,7 +24,7 @@ from .base import BaseStrategy, StrategySignal, BJT
 from .event_bus import EventBus, Event, EventType, on
 from .risk_engine import RiskEngine, RiskConfig, RiskVerdict, CircuitBreaker
 from .position_manager import PositionManager, Position
-from .signal_tracker import SignalTracker, get_tracker
+from .signal_tracker import SignalTracker
 from .runner import HermesRunner, HealthReporter, ComponentHealth
 
 # Strategy imports
@@ -161,32 +161,12 @@ def start_hermes_v3():
                     bus = EventBus.get()
                     bus.emit(Event(type=EventType.MERCU_DATA, data=data, source="mercu_bridge"))
                     
-                    # Feed prices to tracker
-                    try:
-                        pt = _get_price_tracker()
-                        if pt:
-                            pt.update_from_mercu(data)
-                            # Also emit MARKET_DATA for each symbol with price
-                            for sym, px in pt._prices.items():
-                                if px and px > 0:
-                                    bus.emit(Event(type=EventType.MARKET_DATA, data={"symbol": sym, "price": px}, source="mercu"))
-                    except Exception:
-                        pass
-                    
                     if bridge.engine:
                         engine_signals = bridge.engine.generate_signals()
                         if engine_signals:
                             _log.info(f"Engine signals: {len(engine_signals)}")
                             for es in engine_signals:
                                 bus.emit(Event(type=EventType.SIGNAL_GENERATED, data=es, source="engine"))
-                                # Feed signal prices to tracker
-                                if es.get("price"):
-                                    try:
-                                        pt2 = _get_price_tracker()
-                                        if pt2:
-                                            pt2.update_price(es["symbol"], float(es["price"]))
-                                    except Exception:
-                                        pass
                     
                     runner._run_cycle(mercu_data_provider=lambda: data)
                     _pc["errors"] = 0
@@ -201,16 +181,6 @@ def start_hermes_v3():
                 else:
                     _time.sleep(30)
             _log.warning("Poll loop exited (runner._running=False)")
-        
-        # Start signal tracker components
-        try:
-            st = get_tracker()
-            pt = st._price_tracker
-            if pt:
-                pt._running = True
-                _log.info("PriceTracker activated")
-        except Exception as e:
-            _log.warning(f"PriceTracker init: {e}")
         
         _poll_thread = threading.Thread(target=mercu_poll_loop, daemon=True, name="mercu-poll")
         _poll_thread.start()
@@ -233,13 +203,6 @@ def start_hermes_v3():
 
 # Track poll thread for health checks
 _poll_thread = None
-
-def _get_price_tracker():
-    """Lazy-load PriceTracker singleton."""
-    try:
-        return get_tracker()._price_tracker
-    except Exception:
-        return None
 def get_hermes_v3_status() -> dict:
     """Get V3 system status."""
     global _hermes_v3_runner, _hermes_v3_started

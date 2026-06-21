@@ -24,7 +24,7 @@ from .base import BaseStrategy, StrategySignal, BJT
 from .event_bus import EventBus, Event, EventType, on
 from .risk_engine import RiskEngine, RiskConfig, RiskVerdict, CircuitBreaker
 from .position_manager import PositionManager, Position
-from .signal_tracker import SignalTracker, get_tracker
+from .signal_tracker import SignalTracker
 from .runner import HermesRunner, HealthReporter, ComponentHealth
 
 # Strategy imports
